@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4038160654685810300}
   - component: {fileID: 2300946821701262006}
   m_Layer: 0
-  m_Name: StreetChunk1
+  m_Name: StreetChunk2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -60,7 +60,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 951c09f2fb296e74ab5e7dcbdbdb79cc, type: 2}
+  - {fileID: 2100000, guid: 86af5cb887a80a947b7bd967094cfa2d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

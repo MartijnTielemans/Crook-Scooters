@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 7419250966827882316}
   - component: {fileID: 5861895504349157609}
   - component: {fileID: 8556089075656829987}
+  - component: {fileID: 7550188804461955595}
   m_Layer: 0
   m_Name: TrafficLightsPole
-  m_TagString: Untagged
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 7907663294155951606}
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 19.32807, y: 19.32807, z: 200}
+  m_LocalScale: {x: 30.6, y: 19.32807, z: 200}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -83,3 +84,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7550188804461955595
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7907663294155951606}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.41321185, y: 0.020000035, z: 0.0019949812}
+  m_Center: {x: -0.19660594, y: 0.0000000061676775, z: 0.024968961}

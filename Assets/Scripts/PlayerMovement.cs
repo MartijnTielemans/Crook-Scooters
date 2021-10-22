@@ -29,6 +29,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] LayerMask playerMask;
     [SerializeField] LayerMask wallMask;
     [SerializeField] bool onGround;
+    bool canCheckOnGround;
     [SerializeField] bool leftWall;
     bool rightWall;
     RaycastHit groundCheckHit;
@@ -49,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         // Set onGround with a boxcast
-        if (!onGround)
+        if (!onGround && canCheckOnGround)
             onGround = CheckGround();
 
         // Check for walls
@@ -127,6 +128,12 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    IEnumerator SetCanCheckOnGround()
+    {
+        yield return new WaitForSeconds(0.4f);
+        canCheckOnGround = true;
+    }
+
     private void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -136,8 +143,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (onGround)
         {
+            canCheckOnGround = false;
             onGround = false;
             rb.AddForce(Vector3.up * jumpForce);
+
+            StartCoroutine(SetCanCheckOnGround());
         }
     }
 
