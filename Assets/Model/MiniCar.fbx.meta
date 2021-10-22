@@ -3,7 +3,17 @@ guid: 180221fc7bdbe714e9160c38bc3ba6ba
 ModelImporter:
   serializedVersion: 21100
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Car
+    second: {fileID: 2100000, guid: 19d1111fe11cd1c42aee062fc528de94, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WHeel
+    second: {fileID: 2100000, guid: 03d7a7bc81cef5044888c76ab1ee0d33, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

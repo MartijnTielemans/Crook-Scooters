@@ -3,7 +3,12 @@ guid: 998991aca68ba8a489cfe9057a17ece9
 ModelImporter:
   serializedVersion: 21100
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Roadblock
+    second: {fileID: 2100000, guid: 84340cb639faa854b89eae7b2543c9fe, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
