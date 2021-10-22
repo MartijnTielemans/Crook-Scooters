@@ -42,12 +42,15 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
+        onGround = true;
     }
 
     private void Update()
     {
         // Set onGround with a boxcast
-        onGround = CheckGround();
+        if (!onGround)
+            onGround = CheckGround();
 
         // Check for walls
         leftWall = CheckWall(true);
@@ -133,6 +136,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (onGround)
         {
+            onGround = false;
             rb.AddForce(Vector3.up * jumpForce);
         }
     }
@@ -141,7 +145,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            
+            // Do stuff
         }
     }
 }
