@@ -25,14 +25,15 @@ public class GameManager : MonoBehaviour
     {
         if (Vector3.Distance(middle.position, spawnedChunks[spawnedChunks.Count -1].transform.position) < distanceSpawnChunk)
         {
+            // If in the range of 10, spawns any random chunk
             int rnd = Random.Range(0, obstacleSpawnChance);
-            if (rnd == 0)
+            if (rnd >= 0 && rnd <= 10)
             {
-                SpawnChunk(0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                SpawnChunk(RandomChunkNumber(), spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
             }
             else
             {
-                SpawnChunk(RandomChunkNumber(), spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                SpawnChunk(0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
             }
         }
     }

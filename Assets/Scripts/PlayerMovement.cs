@@ -158,4 +158,12 @@ public class PlayerMovement : MonoBehaviour
             // Do stuff
         }
     }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        if (col.gameObject.CompareTag("Obstacle"))
+        {
+            Debug.Log("Obstacle hit");
+        }
+    }
 }
