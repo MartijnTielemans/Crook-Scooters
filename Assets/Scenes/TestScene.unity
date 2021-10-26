@@ -846,13 +846,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1336004604}
     - target: {fileID: 2165343977409280405, guid: 55c92386e0af2454092045239af41a72, type: 3}
+      propertyPath: moveScript
+      value: 
+      objectReference: {fileID: 310601067}
+    - target: {fileID: 2165343977409280405, guid: 55c92386e0af2454092045239af41a72, type: 3}
       propertyPath: chunkParent
       value: 
       objectReference: {fileID: 310601065}
-    - target: {fileID: 2165343977409280405, guid: 55c92386e0af2454092045239af41a72, type: 3}
-      propertyPath: levelStartLength
-      value: 14
-      objectReference: {fileID: 0}
     - target: {fileID: 2165343977409280405, guid: 55c92386e0af2454092045239af41a72, type: 3}
       propertyPath: levelStartPosition.z
       value: -60

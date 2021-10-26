@@ -43,6 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 070a26b5b2a42cc43b96a9b0944e6f7d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveScript: {fileID: 0}
   middle: {fileID: 0}
   chunkParent: {fileID: 0}
   spawnedChunks: []
@@ -61,6 +62,12 @@ MonoBehaviour:
   - {fileID: 8843523463735302349, guid: 7cabf18e9131c4046b31bad0a1865066, type: 3}
   - {fileID: 8843523463735302349, guid: 0d5bbf386868c554d8745228b056c7dd, type: 3}
   - {fileID: 8843523463735302349, guid: 74553a30faed16e4da39152797430ff7, type: 3}
-  levelStartLength: 6
+  levelStartLength: 16
   distanceSpawnChunk: 200
-  obstacleSpawnChance: 25
+  gameSpeed: 1
+  speedIncreaseAmount: 0.15
+  maxSpeed: 3
+  obstacleSpawnChance: 19
+  spawnChanceIncreaseAmount: 2
+  maxObstacleSpawnChance: 27
+  timeInterval: 12
