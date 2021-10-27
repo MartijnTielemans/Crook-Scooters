@@ -182,8 +182,9 @@ public class PlayerMovement : MonoBehaviour
 
     void ChangeColor(Color color)
     {
-        hatRenderer.material.color = color;
-        scooterRenderer.material.color = color;
+        playerColor = color;
+        hatRenderer.material.color = playerColor;
+        scooterRenderer.material.color = playerColor;
     }
 
     private void OnMove(InputValue value)
