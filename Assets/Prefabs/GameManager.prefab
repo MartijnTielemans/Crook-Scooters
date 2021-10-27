@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 371001018855357412}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,6 +130,14 @@ MonoBehaviour:
       - m_Name: 
         m_Id: 374ffe1d-46d3-4881-a282-55e1b0fcb85f
         m_Path: <Keyboard>/space
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+      - m_Name: 
+        m_Id: 4c57a0f5-1f13-4f1d-b0ae-345699362d8f
+        m_Path: <Keyboard>/enter
         m_Interactions: 
         m_Processors: 
         m_Groups: 

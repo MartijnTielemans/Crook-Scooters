@@ -5,10 +5,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
+    GameManager manager;
     Rigidbody rb;
 
     [Header("Customization")]
+    [SerializeField] Color[] possibleColors;
     public Color playerColor;
+    [SerializeField] MeshRenderer hatRenderer;
+    [SerializeField] MeshRenderer scooterRenderer;
+    public bool canMove;
 
     [Space]
 
@@ -42,8 +47,10 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        manager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
+        InitialisePlayer();
+        rb = GetComponent<Rigidbody>();
         onGround = true;
     }
 
@@ -70,7 +77,8 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // Call MovePlayer
-        MovePlayer();
+        if (canMove)
+            MovePlayer();
 
         // Apply gravity
         if (!onGround)
@@ -132,6 +140,50 @@ public class PlayerMovement : MonoBehaviour
     {
         yield return new WaitForSeconds(0.4f);
         canCheckOnGround = true;
+    }
+
+    // Sets initial values like location and color
+    void InitialisePlayer()
+    {
+        int playersJoined = PlayerInputManager.instance.playerCount-1;
+        manager.players.Add(gameObject);
+
+        switch (playersJoined)
+        {
+            case 0:
+                SetLocation(manager.spawnLocations[0]);
+                ChangeColor(possibleColors[0]);
+                break;
+
+            case 1:
+                SetLocation(manager.spawnLocations[1]);
+                ChangeColor(possibleColors[1]);
+                break;
+
+            case 2:
+                SetLocation(manager.spawnLocations[2]);
+                ChangeColor(possibleColors[2]);
+                break;
+
+            case 3:
+                SetLocation(manager.spawnLocations[3]);
+                ChangeColor(possibleColors[3]);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    void SetLocation(Vector3 position)
+    {
+        transform.position = position;
+    }
+
+    void ChangeColor(Color color)
+    {
+        hatRenderer.material.color = color;
+        scooterRenderer.material.color = color;
     }
 
     private void OnMove(InputValue value)

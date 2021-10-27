@@ -50,7 +50,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c22f84f0e851f054ca184d36cda232cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  possibleColors:
+  - {r: 1, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0.35130644, b: 1, a: 0}
+  - {r: 0.028762817, g: 1, b: 0, a: 0}
+  - {r: 1, g: 0, b: 0.826179, a: 0}
+  - {r: 1, g: 0.5823603, b: 0, a: 0}
+  - {r: 0.9921569, g: 1, b: 0, a: 0}
+  - {r: 0, g: 1, b: 0.9733317, a: 0}
+  - {r: 1, g: 1, b: 1, a: 0}
   playerColor: {r: 0, g: 0, b: 0, a: 0}
+  hatRenderer: {fileID: 338216790819747804}
+  scooterRenderer: {fileID: 4086967393361347128}
+  canMove: 0
   moveSpeed: 7
   inputSmoothing: 0.25
   jumpForce: 900
@@ -384,5 +396,15 @@ PrefabInstance:
 --- !u!4 &3419998556678394090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4240451765682909731, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
+  m_PrefabInstance: {fileID: 1562567620201226953}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4086967393361347128 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3249498623409873137, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
+  m_PrefabInstance: {fileID: 1562567620201226953}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &338216790819747804 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1233648309113787669, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
   m_PrefabInstance: {fileID: 1562567620201226953}
   m_PrefabAsset: {fileID: 0}

@@ -14,10 +14,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] int playersJoined;
     [SerializeField] int maxPlayers = 4;
     [SerializeField] float playerJoinTimer = 10;
-    [SerializeField] bool canJoin = true;
     [SerializeField] bool onlySpawnEmpty = true;
-    [SerializeField] Vector3[] spawnLocations;
-    List<GameObject> players = new List<GameObject>();
+    public Vector3[] spawnLocations;
+    public List<GameObject> players = new List<GameObject>();
 
     [Space]
     [Header("Chunk Spawning")]
@@ -51,10 +50,17 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         // After join timer is over, set only spawn empty to false
+        // Also disable joining
         if (Time.time >= playerJoinTimer)
         {
             onlySpawnEmpty = false;
             PlayerInputManager.instance.DisableJoining();
+
+            // Set every player's canMove to true
+            for (int i = 0; i < players.Count; i++)
+            {
+                players[i].GetComponent<PlayerMovement>().canMove = true;
+            }
         }
 
         // If the elapsed time has been reached
@@ -144,44 +150,5 @@ public class GameManager : MonoBehaviour
     public void OnPlayerJoined()
     {
         Debug.Log("player joined");
-    }
-
-    // Invoked when a player joins
-    public void PlayerJoin()
-    {
-        // Cannot join after max players is reached
-        if (playersJoined < maxPlayers)
-        {
-            // Different location for each player
-            //switch (playersJoined)
-            //{
-            //    case 0:
-            //        SpawnPlayer(spawnLocations[0]);
-            //        break;
-
-            //    case 1:
-            //        SpawnPlayer(spawnLocations[1]);
-            //        break;
-
-            //    case 2:
-            //        SpawnPlayer(spawnLocations[2]);
-            //        break;
-
-            //    case 3:
-            //        SpawnPlayer(spawnLocations[3]);
-            //        break;
-
-            //    default:
-            //        break;
-            //}
-
-            playersJoined++;
-        }
-    }
-
-    void SpawnPlayer(GameObject player, Vector3 location)
-    {
-        // TODO: Change player default color
-        players.Add(player);
     }
 }
