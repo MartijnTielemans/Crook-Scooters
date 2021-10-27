@@ -1,18 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] MoveObjectScript moveScript;
     Vector3 originalMoveSpeed;
 
+    [Space]
+    [Header("Player Joining")]
+    public GameObject playerPrefab;
+    [SerializeField] int playersJoined;
+    [SerializeField] int maxPlayers = 4;
+    [SerializeField] float playerJoinTimer = 10;
+    [SerializeField] bool canJoin = true;
+    [SerializeField] bool onlySpawnEmpty = true;
+    [SerializeField] Vector3[] spawnLocations;
+    List<GameObject> players = new List<GameObject>();
+
+    [Space]
+    [Header("Chunk Spawning")]
     [SerializeField] Transform middle;
     [SerializeField] GameObject chunkParent;
-
     public List<GameObject> spawnedChunks = new List<GameObject>();
     [SerializeField] GameObject[] levelParts;
 
+    [Space]
     [Header("Configurables")]
     [SerializeField] int levelStartLength;
     [SerializeField] float distanceSpawnChunk = 200f;
@@ -28,13 +42,21 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         originalMoveSpeed = moveScript.moveSpeed;
-        currentTimeMilestone = timeInterval;
+        currentTimeMilestone = timeInterval + playerJoinTimer;
         SpawnLevelStart();
+        PlayerInputManager.instance.EnableJoining();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // After join timer is over, set only spawn empty to false
+        if (Time.time >= playerJoinTimer)
+        {
+            onlySpawnEmpty = false;
+            PlayerInputManager.instance.DisableJoining();
+        }
+
         // If the elapsed time has been reached
         if (Time.time >= currentTimeMilestone)
         {
@@ -44,15 +66,23 @@ public class GameManager : MonoBehaviour
         // If the middle point got close enough to the last spawned chunk
         if (Vector3.Distance(middle.position, spawnedChunks[spawnedChunks.Count -1].transform.position) < distanceSpawnChunk)
         {
-            // If in the range of 10, spawns any random chunk
-            int rnd = Random.Range(0, emptyChunkSpawnChance);
-            if (rnd >= 0 && rnd <= 10)
+            // if onlySpawnEmpty is true, only spawn empty street chunks
+            if (onlySpawnEmpty)
             {
-                SpawnChunk(RandomChunkNumber(), spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                SpawnChunk(0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
             }
             else
             {
-                SpawnChunk(0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                // If in the range of 10, spawns any random chunk
+                int rnd = Random.Range(0, emptyChunkSpawnChance);
+                if (rnd >= 0 && rnd <= 10)
+                {
+                    SpawnChunk(RandomChunkNumber(), spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                }
+                else
+                {
+                    SpawnChunk(0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                }
             }
         }
     }
@@ -78,11 +108,13 @@ public class GameManager : MonoBehaviour
         return chunk.transform.Find("SpawnPoint");
     }
 
+    // Gets a random chunk number from the list of chunks
     int RandomChunkNumber()
     {
         return Random.Range(0, levelParts.Length);
     }
 
+    // Changes the game speed and empty chunk chance
     void ChangeGameIntensity()
     {
         Debug.Log("Time milestone reached");
@@ -107,5 +139,49 @@ public class GameManager : MonoBehaviour
     void ChangeMoveSpeed(float speed)
     {
         moveScript.moveSpeed = originalMoveSpeed * speed;
+    }
+
+    public void OnPlayerJoined()
+    {
+        Debug.Log("player joined");
+    }
+
+    // Invoked when a player joins
+    public void PlayerJoin()
+    {
+        // Cannot join after max players is reached
+        if (playersJoined < maxPlayers)
+        {
+            // Different location for each player
+            //switch (playersJoined)
+            //{
+            //    case 0:
+            //        SpawnPlayer(spawnLocations[0]);
+            //        break;
+
+            //    case 1:
+            //        SpawnPlayer(spawnLocations[1]);
+            //        break;
+
+            //    case 2:
+            //        SpawnPlayer(spawnLocations[2]);
+            //        break;
+
+            //    case 3:
+            //        SpawnPlayer(spawnLocations[3]);
+            //        break;
+
+            //    default:
+            //        break;
+            //}
+
+            playersJoined++;
+        }
+    }
+
+    void SpawnPlayer(GameObject player, Vector3 location)
+    {
+        // TODO: Change player default color
+        players.Add(player);
     }
 }

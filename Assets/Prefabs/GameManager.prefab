@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2165343977409280404}
   - component: {fileID: 2165343977409280405}
+  - component: {fileID: 371001018855357412}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -44,6 +45,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveScript: {fileID: 0}
+  playerPrefab: {fileID: 950208211796973145, guid: 32c68e5bc464c4e43a030889b2376e82, type: 3}
+  playersJoined: 0
+  maxPlayers: 4
+  playerJoinTimer: 10
+  canJoin: 1
+  onlySpawnEmpty: 1
+  spawnLocations:
+  - {x: -4, y: 1.2, z: -1.52}
+  - {x: -1.35, y: 1.2, z: -1.52}
+  - {x: 1.35, y: 1.2, z: -1.52}
+  - {x: 4, y: 1.2, z: -1.52}
   middle: {fileID: 0}
   chunkParent: {fileID: 0}
   spawnedChunks: []
@@ -66,8 +78,79 @@ MonoBehaviour:
   distanceSpawnChunk: 200
   gameSpeed: 1
   speedIncreaseAmount: 0.15
-  maxSpeed: 3
-  obstacleSpawnChance: 19
+  maxSpeed: 3.5
+  emptyChunkSpawnChance: 19
   spawnChanceIncreaseAmount: 2
-  maxObstacleSpawnChance: 27
+  maxEmptySpawnChance: 26
   timeInterval: 12
+--- !u!114 &371001018855357412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165343977409280407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_NotificationBehavior: 0
+  m_MaxPlayerCount: 4
+  m_AllowJoining: 0
+  m_JoinBehavior: 1
+  m_PlayerJoinedEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2165343977409280405}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: PlayerJoin
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_PlayerLeftEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_JoinAction:
+    m_UseReference: 0
+    m_Action:
+      m_Name: Join
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: 1bdc3dc1-95c7-49f0-8da7-2252e573bab5
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings:
+      - m_Name: 
+        m_Id: 374ffe1d-46d3-4881-a282-55e1b0fcb85f
+        m_Path: <Keyboard>/space
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+      - m_Name: 
+        m_Id: b02a5067-fdbe-40a3-9435-afff6d69f328
+        m_Path: <Gamepad>/start
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+    m_Reference: {fileID: 8427592114905389461, guid: 965b623c4790d9e45b1632f63b27ccbd, type: 3}
+  m_PlayerPrefab: {fileID: 950208211796973145, guid: 32c68e5bc464c4e43a030889b2376e82, type: 3}
+  m_SplitScreen: 0
+  m_MaintainAspectRatioInSplitScreen: 0
+  m_FixedNumberOfSplitScreens: -1
+  m_SplitScreenRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
