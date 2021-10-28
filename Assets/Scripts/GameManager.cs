@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     [Header("Player Joining")]
     public GameObject playerPrefab;
     [SerializeField] int playersJoined;
-    [SerializeField] int maxPlayers = 4;
     [SerializeField] float playerJoinTimer = 10;
     [SerializeField] bool onlySpawnEmpty = true;
     public Vector3[] spawnLocations;
@@ -38,7 +37,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] float timeInterval = 12;
     float currentTimeMilestone;
 
-    void Awake()
+    void Start()
     {
         originalMoveSpeed = moveScript.moveSpeed;
         currentTimeMilestone = timeInterval + playerJoinTimer;
