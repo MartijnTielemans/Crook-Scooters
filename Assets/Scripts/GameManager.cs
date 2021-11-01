@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,13 +10,17 @@ public class GameManager : MonoBehaviour
     Vector3 originalMoveSpeed;
 
     [Space]
+    [Header("Game Variables")]
+    public bool singleplayerMode;
+    public bool godMode;
+
+    [Space]
     [Header("Player Joining")]
     public GameObject playerPrefab;
     [SerializeField] int playersJoined;
     [SerializeField] float playerJoinTimer = 10;
-    [SerializeField] bool onlySpawnEmpty = true;
     public Vector3[] spawnLocations;
-    public List<GameObject> players = new List<GameObject>();
+    public List<PlayerMovement> players = new List<PlayerMovement>();
 
     [Space]
     [Header("Chunk Spawning")]
@@ -23,6 +28,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject chunkParent;
     public List<GameObject> spawnedChunks = new List<GameObject>();
     [SerializeField] GameObject[] levelParts;
+    [SerializeField] bool onlySpawnEmpty = true;
 
     [Space]
     [Header("Configurables")]
@@ -36,6 +42,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int maxEmptySpawnChance = 27;
     [SerializeField] float timeInterval = 12;
     float currentTimeMilestone;
+    [SerializeField] float endSequenceTimer = 1;
 
     void Start()
     {
@@ -58,7 +65,7 @@ public class GameManager : MonoBehaviour
             // Set every player's canMove to true
             for (int i = 0; i < players.Count; i++)
             {
-                players[i].GetComponent<PlayerMovement>().canMove = true;
+                players[i].canMove = true;
             }
         }
 
@@ -149,5 +156,29 @@ public class GameManager : MonoBehaviour
     public void OnPlayerJoined()
     {
         Debug.Log("player joined");
+    }
+
+    public void GameEnd()
+    {
+        if (singleplayerMode)
+        {
+            StartCoroutine(GameEndSequenceSingleplayer(endSequenceTimer));
+        }
+        else if (!singleplayerMode)
+        {
+            StartCoroutine(GameEndSequenceMultiplayer(endSequenceTimer));
+        }
+    }
+
+    IEnumerator GameEndSequenceSingleplayer(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    IEnumerator GameEndSequenceMultiplayer(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        SceneManager.LoadScene("MainMenu");
     }
 }

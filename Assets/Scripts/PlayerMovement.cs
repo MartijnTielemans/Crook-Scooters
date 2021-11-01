@@ -23,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 900;
     [SerializeField] float bounceForce = 250;
     [SerializeField] float gravity = 23;
+    public bool active;
 
     [Space]
 
@@ -56,20 +57,23 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        // Set onGround with a boxcast
-        if (!onGround && canCheckOnGround)
-            onGround = CheckGround();
-
-        // Check for walls
-        leftWall = CheckWall(true);
-        rightWall = CheckWall(false);
-
-        // Check if a player is hit with the groundcheck and add force
-        if (!onGround)
+        if (active)
         {
-            if (CheckPlayerJump())
+            // Set onGround with a boxcast
+            if (!onGround && canCheckOnGround)
+                onGround = CheckGround();
+
+            // Check for walls
+            leftWall = CheckWall(true);
+            rightWall = CheckWall(false);
+
+            // Check if a player is hit with the groundcheck and add force
+            if (!onGround)
             {
-                rb.AddForce(Vector3.up * bounceForce);
+                if (CheckPlayerJump())
+                {
+                    rb.AddForce(Vector3.up * bounceForce);
+                }
             }
         }
     }
@@ -77,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
     void FixedUpdate()
     {
         // Call MovePlayer
-        if (canMove)
+        if (canMove && active)
             MovePlayer();
 
         // Apply gravity
@@ -146,7 +150,7 @@ public class PlayerMovement : MonoBehaviour
     void InitialisePlayer()
     {
         int playersJoined = PlayerInputManager.instance.playerCount-1;
-        manager.players.Add(gameObject);
+        manager.players.Add(gameObject.GetComponent<PlayerMovement>());
 
         switch (playersJoined)
         {
@@ -187,6 +191,42 @@ public class PlayerMovement : MonoBehaviour
         scooterRenderer.material.color = playerColor;
     }
 
+    void PlayerDeath()
+    {
+        Debug.Log("Player Died");
+
+        // Set Player active bool
+        active = false;
+
+        // Stop player from inputting
+        canMove = false;
+
+        // Check if only 1 player is still alive (Depending on single or multiplayer mode)
+        if (manager.singleplayerMode)
+        {
+            // Start endgame sequence
+        }
+        else
+        {
+            int actives = 0;
+
+            // Got through every player, check if they are still active
+            for (int i = 0; i < manager.players.Count; i++)
+            {
+                if (manager.players[i].active)
+                {
+                    actives++;
+                }
+            }
+
+            // If there is only 1 active player
+            if (actives == 1)
+            {
+                // Start game end sequence
+            }
+        }
+    }
+
     private void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -208,7 +248,12 @@ public class PlayerMovement : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            // Do stuff
+            Debug.Log("Hit enemy");
+
+            if (!manager.godMode)
+            {
+                PlayerDeath();
+            }
         }
     }
 
@@ -217,6 +262,7 @@ public class PlayerMovement : MonoBehaviour
         if (col.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Obstacle hit");
+            PlayerDeath();
         }
     }
 }
