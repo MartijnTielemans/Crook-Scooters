@@ -45,17 +45,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveScript: {fileID: 0}
+  singleplayerMode: 0
+  godMode: 0
   playerPrefab: {fileID: 950208211796973145, guid: 32c68e5bc464c4e43a030889b2376e82, type: 3}
   playersJoined: 0
-  maxPlayers: 4
   playerJoinTimer: 10
-  canJoin: 1
-  onlySpawnEmpty: 1
   spawnLocations:
   - {x: -4, y: 1.2, z: -1.52}
   - {x: -1.35, y: 1.2, z: -1.52}
   - {x: 1.35, y: 1.2, z: -1.52}
   - {x: 4, y: 1.2, z: -1.52}
+  players: []
   middle: {fileID: 0}
   chunkParent: {fileID: 0}
   spawnedChunks: []
@@ -74,6 +74,7 @@ MonoBehaviour:
   - {fileID: 8843523463735302349, guid: 7cabf18e9131c4046b31bad0a1865066, type: 3}
   - {fileID: 8843523463735302349, guid: 0d5bbf386868c554d8745228b056c7dd, type: 3}
   - {fileID: 8843523463735302349, guid: 74553a30faed16e4da39152797430ff7, type: 3}
+  onlySpawnEmpty: 1
   levelStartLength: 16
   distanceSpawnChunk: 200
   gameSpeed: 1
@@ -82,7 +83,8 @@ MonoBehaviour:
   emptyChunkSpawnChance: 19
   spawnChanceIncreaseAmount: 2
   maxEmptySpawnChance: 26
-  timeInterval: 12
+  timeInterval: 11
+  endSequenceTimer: 1
 --- !u!114 &371001018855357412
 MonoBehaviour:
   m_ObjectHideFlags: 0

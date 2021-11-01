@@ -68,6 +68,7 @@ MonoBehaviour:
   jumpForce: 900
   bounceForce: 250
   gravity: 23
+  active: 1
   groundCheck: {fileID: 950208212514248919}
   wallCheckLeft: {fileID: 950208213560656522}
   wallCheckRight: {fileID: 950208212747422765}

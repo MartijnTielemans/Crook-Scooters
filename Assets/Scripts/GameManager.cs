@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
+[RequireComponent(typeof(UIManager))]
 public class GameManager : MonoBehaviour
 {
     [SerializeField] MoveObjectScript moveScript;
@@ -17,7 +18,6 @@ public class GameManager : MonoBehaviour
     [Space]
     [Header("Player Joining")]
     public GameObject playerPrefab;
-    [SerializeField] int playersJoined;
     [SerializeField] float playerJoinTimer = 10;
     public Vector3[] spawnLocations;
     public List<PlayerMovement> players = new List<PlayerMovement>();
@@ -61,6 +61,21 @@ public class GameManager : MonoBehaviour
         {
             onlySpawnEmpty = false;
             PlayerInputManager.instance.DisableJoining();
+
+            // If no players joined, end the game
+            if (players.Count == 0)
+            {
+                GameEnd(true);
+            }
+            // If only 1 player joined, singleplayer mode is set to true
+            else if (players.Count == 1)
+            {
+                singleplayerMode = true;
+            }
+            else
+            {
+                singleplayerMode = false;
+            }
 
             // Set every player's canMove to true
             for (int i = 0; i < players.Count; i++)
@@ -158,24 +173,42 @@ public class GameManager : MonoBehaviour
         Debug.Log("player joined");
     }
 
-    public void GameEnd()
+    // Calls a coroutine sequence for different game endings
+    public void GameEnd(bool premature)
     {
-        if (singleplayerMode)
+        if (premature)
         {
-            StartCoroutine(GameEndSequenceSingleplayer(endSequenceTimer));
+            StartCoroutine(GameEndSequencePremature(endSequenceTimer));
         }
-        else if (!singleplayerMode)
+        else
         {
-            StartCoroutine(GameEndSequenceMultiplayer(endSequenceTimer));
+            if (singleplayerMode)
+            {
+                StartCoroutine(GameEndSequenceSingleplayer(endSequenceTimer));
+            }
+            else if (!singleplayerMode)
+            {
+                StartCoroutine(GameEndSequenceMultiplayer(endSequenceTimer));
+            }
         }
     }
 
+    // Game end sequences
+    // Game end if no players joined
+    IEnumerator GameEndSequencePremature(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    // Game end in singleplayer mode
     IEnumerator GameEndSequenceSingleplayer(float timer)
     {
         yield return new WaitForSeconds(timer);
         SceneManager.LoadScene("MainMenu");
     }
 
+    // Game end in multiplayer mode
     IEnumerator GameEndSequenceMultiplayer(float timer)
     {
         yield return new WaitForSeconds(timer);

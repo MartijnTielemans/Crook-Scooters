@@ -16,17 +16,15 @@ public class PlayerMovement : MonoBehaviour
     public bool canMove;
 
     [Space]
-
     [Header("Player Stats")]
     [SerializeField] float moveSpeed = 7;
     [SerializeField] float inputSmoothing = 1.5f;
     [SerializeField] float jumpForce = 900;
     [SerializeField] float bounceForce = 250;
     [SerializeField] float gravity = 23;
-    public bool active;
+    public bool active = true;
 
     [Space]
-
     [Header("Collisions")]
     [SerializeField] BoxCollider groundCheck;
     [SerializeField] BoxCollider wallCheckLeft;
@@ -72,9 +70,14 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (CheckPlayerJump())
                 {
+                    rb.velocity = Vector3.zero;
                     rb.AddForce(Vector3.up * bounceForce);
                 }
             }
+        }
+        else if (!active)
+        {
+            // Do something
         }
     }
 
@@ -91,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Checks for walls to the left and right
     bool CheckWall(bool isLeft)
     {
         if (isLeft)
@@ -105,12 +109,14 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Check for ground collision
     bool CheckGround()
     {
         bool hit = Physics.BoxCast(groundCheck.bounds.center, groundCheck.bounds.size, Vector3.down, out groundCheckHit, groundCheck.transform.rotation, 1, groundMask);
         return hit;
     }
 
+    // Check if there is another player below the players
     bool CheckPlayerJump()
     {
         bool hit = Physics.BoxCast(groundCheck.bounds.center, groundCheck.bounds.size, Vector3.down, out groundCheckHit, groundCheck.transform.rotation, 1, playerMask);
@@ -205,6 +211,7 @@ public class PlayerMovement : MonoBehaviour
         if (manager.singleplayerMode)
         {
             // Start endgame sequence
+            manager.GameEnd(false);
         }
         else
         {
@@ -223,6 +230,7 @@ public class PlayerMovement : MonoBehaviour
             if (actives == 1)
             {
                 // Start game end sequence
+                manager.GameEnd(false);
             }
         }
     }
@@ -234,7 +242,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump()
     {
-        if (onGround)
+        if (onGround && active)
         {
             canCheckOnGround = false;
             onGround = false;
@@ -248,12 +256,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            Debug.Log("Hit enemy");
-
-            if (!manager.godMode)
-            {
-                PlayerDeath();
-            }
+            // Do stuff
         }
     }
 
@@ -262,7 +265,11 @@ public class PlayerMovement : MonoBehaviour
         if (col.gameObject.CompareTag("Obstacle"))
         {
             Debug.Log("Obstacle hit");
-            PlayerDeath();
+
+            if (!manager.godMode)
+            {
+                PlayerDeath();
+            }
         }
     }
 }
