@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2165343977409280404}
+  - component: {fileID: 7554940249377949174}
   - component: {fileID: 2165343977409280405}
   - component: {fileID: 371001018855357412}
   m_Layer: 0
@@ -32,6 +33,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7554940249377949174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165343977409280407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 805ea6ca130801746aad52aaf673a0ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joinCanvas: {fileID: 0}
+  gameCanvas: {fileID: 0}
+  joinTimerText: {fileID: 0}
+  playersJoinedText: {fileID: 0}
+  gameTimerText: {fileID: 0}
 --- !u!114 &2165343977409280405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -47,8 +65,8 @@ MonoBehaviour:
   moveScript: {fileID: 0}
   singleplayerMode: 0
   godMode: 0
+  canJoin: 0
   playerPrefab: {fileID: 950208211796973145, guid: 32c68e5bc464c4e43a030889b2376e82, type: 3}
-  playersJoined: 0
   playerJoinTimer: 10
   spawnLocations:
   - {x: -4, y: 1.2, z: -1.52}
@@ -56,6 +74,12 @@ MonoBehaviour:
   - {x: 1.35, y: 1.2, z: -1.52}
   - {x: 4, y: 1.2, z: -1.52}
   players: []
+  playersJoinedTexts:
+  - Once there was...
+  - Once there was a crook..
+  - Once there were 2 crooks..
+  - Once there were 3 crooks..
+  - Once there were 4 crooks..
   middle: {fileID: 0}
   chunkParent: {fileID: 0}
   spawnedChunks: []
@@ -75,16 +99,16 @@ MonoBehaviour:
   - {fileID: 8843523463735302349, guid: 0d5bbf386868c554d8745228b056c7dd, type: 3}
   - {fileID: 8843523463735302349, guid: 74553a30faed16e4da39152797430ff7, type: 3}
   onlySpawnEmpty: 1
+  emptyChunkSpawnChance: 26
+  spawnChanceDecreaseAmount: 2
+  maxEmptySpawnChance: 20
   levelStartLength: 16
   distanceSpawnChunk: 200
   gameSpeed: 1
-  speedIncreaseAmount: 0.15
+  speedIncreaseAmount: 0.1
   maxSpeed: 3.5
-  emptyChunkSpawnChance: 19
-  spawnChanceIncreaseAmount: 2
-  maxEmptySpawnChance: 26
   timeInterval: 11
-  endSequenceTimer: 1
+  endSequenceTimer: 5
 --- !u!114 &371001018855357412
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,25 +10,31 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject gameCanvas;
 
     [SerializeField] TextMeshProUGUI joinTimerText;
+    [SerializeField] TextMeshProUGUI playersJoinedText;
     [SerializeField] TextMeshProUGUI gameTimerText;
 
-    public void JoinCanvasVisibility(bool visible)
+    public void JoinCanvasAnimation(string anim)
     {
-        joinCanvas.GetComponent<Animator>().Play("CanvasLeave");
+        joinCanvas.GetComponent<Animator>().Play(anim);
     }
 
-    public void GameCanvasVisibility(bool visible)
+    public void GameCanvasAnimation(string anim)
     {
-        gameCanvas.GetComponent<Animator>().Play("CanvasLeave");
+        gameCanvas.GetComponent<Animator>().Play(anim);
     }
 
     public void DisplayJoinTimer(float value)
     {
-        joinTimerText.text = value.ToString();
+        joinTimerText.text = value.ToString("F1");
+    }
+
+    public void DisplayPlayersJoinedText(string text)
+    {
+        playersJoinedText.text = text;
     }
 
     public void DisplayGameTimer(float value)
     {
-        gameTimerText.text = value.ToString();
+        gameTimerText.text = value.ToString("F1");
     }
 }

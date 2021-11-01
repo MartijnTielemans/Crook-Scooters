@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(UIManager))]
 public class GameManager : MonoBehaviour
 {
+    UIManager uiManager;
     [SerializeField] MoveObjectScript moveScript;
     Vector3 originalMoveSpeed;
 
@@ -14,13 +15,16 @@ public class GameManager : MonoBehaviour
     [Header("Game Variables")]
     public bool singleplayerMode;
     public bool godMode;
+    public bool gameOver;
 
     [Space]
     [Header("Player Joining")]
+    [SerializeField] bool canJoin;
     public GameObject playerPrefab;
     [SerializeField] float playerJoinTimer = 10;
     public Vector3[] spawnLocations;
     public List<PlayerMovement> players = new List<PlayerMovement>();
+    [SerializeField] string[] playersJoinedTexts;
 
     [Space]
     [Header("Chunk Spawning")]
@@ -29,6 +33,9 @@ public class GameManager : MonoBehaviour
     public List<GameObject> spawnedChunks = new List<GameObject>();
     [SerializeField] GameObject[] levelParts;
     [SerializeField] bool onlySpawnEmpty = true;
+    public int emptyChunkSpawnChance = 26;
+    [SerializeField] int spawnChanceDecreaseAmount = 2;
+    [SerializeField] int minEmptySpawnChance = 20;
 
     [Space]
     [Header("Configurables")]
@@ -37,17 +44,18 @@ public class GameManager : MonoBehaviour
     public float gameSpeed = 1;
     [SerializeField] float speedIncreaseAmount = .2f;
     [SerializeField] float maxSpeed = 3;
-    public int emptyChunkSpawnChance = 19;
-    [SerializeField] int spawnChanceIncreaseAmount = 2;
-    [SerializeField] int maxEmptySpawnChance = 27;
     [SerializeField] float timeInterval = 12;
     float currentTimeMilestone;
     [SerializeField] float endSequenceTimer = 1;
 
     void Start()
     {
+        uiManager = GetComponent<UIManager>();
+
         originalMoveSpeed = moveScript.moveSpeed;
         currentTimeMilestone = timeInterval + playerJoinTimer;
+        canJoin = true;
+
         SpawnLevelStart();
         PlayerInputManager.instance.EnableJoining();
     }
@@ -57,7 +65,7 @@ public class GameManager : MonoBehaviour
     {
         // After join timer is over, set only spawn empty to false
         // Also disable joining
-        if (Time.time >= playerJoinTimer)
+        if (Time.timeSinceLevelLoad >= playerJoinTimer && canJoin)
         {
             onlySpawnEmpty = false;
             PlayerInputManager.instance.DisableJoining();
@@ -77,15 +85,31 @@ public class GameManager : MonoBehaviour
                 singleplayerMode = false;
             }
 
+            // Set UI animation to leave if there are players
+            if (players.Count != 0)
+            {
+                uiManager.JoinCanvasAnimation("JoinUI_Leave");
+            }
+
             // Set every player's canMove to true
             for (int i = 0; i < players.Count; i++)
             {
                 players[i].canMove = true;
             }
+
+            canJoin = false;
+        }
+        else if (canJoin)
+        {
+            // Set the amount of players joined text based on the amount of players
+            uiManager.DisplayPlayersJoinedText(playersJoinedTexts[players.Count]);
+
+            // Set the join timer text
+            uiManager.DisplayJoinTimer(playerJoinTimer - Time.timeSinceLevelLoad);
         }
 
         // If the elapsed time has been reached
-        if (Time.time >= currentTimeMilestone)
+        if (Time.timeSinceLevelLoad >= currentTimeMilestone)
         {
             ChangeGameIntensity();
         }
@@ -111,6 +135,12 @@ public class GameManager : MonoBehaviour
                     SpawnChunk(0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
                 }
             }
+        }
+
+        // Set game timer from moment player join sequence ends
+        if (!gameOver)
+        {
+            uiManager.DisplayGameTimer(Time.timeSinceLevelLoad - playerJoinTimer);
         }
     }
 
@@ -147,9 +177,9 @@ public class GameManager : MonoBehaviour
         Debug.Log("Time milestone reached");
 
         // Decrease obstacle spawn chance
-        if (emptyChunkSpawnChance < maxEmptySpawnChance)
+        if (emptyChunkSpawnChance < minEmptySpawnChance)
         {
-            emptyChunkSpawnChance += spawnChanceIncreaseAmount;
+            emptyChunkSpawnChance -= spawnChanceDecreaseAmount;
         }
 
         // Change the game speed
@@ -176,6 +206,8 @@ public class GameManager : MonoBehaviour
     // Calls a coroutine sequence for different game endings
     public void GameEnd(bool premature)
     {
+        gameOver = true;
+
         if (premature)
         {
             StartCoroutine(GameEndSequencePremature(endSequenceTimer));
@@ -197,6 +229,8 @@ public class GameManager : MonoBehaviour
     // Game end if no players joined
     IEnumerator GameEndSequencePremature(float timer)
     {
+        uiManager.DisplayPlayersJoinedText("It was quiet that night...");
+
         yield return new WaitForSeconds(timer);
         SceneManager.LoadScene("MainMenu");
     }
