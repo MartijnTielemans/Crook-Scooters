@@ -65,6 +65,7 @@ MonoBehaviour:
   moveScript: {fileID: 0}
   singleplayerMode: 0
   godMode: 0
+  gameOver: 0
   canJoin: 0
   playerPrefab: {fileID: 950208211796973145, guid: 32c68e5bc464c4e43a030889b2376e82, type: 3}
   playerJoinTimer: 10
@@ -101,10 +102,16 @@ MonoBehaviour:
   onlySpawnEmpty: 1
   emptyChunkSpawnChance: 26
   spawnChanceDecreaseAmount: 2
-  maxEmptySpawnChance: 20
+  minEmptySpawnChance: 20
+  tutorialParts:
+  - {fileID: 8843523463735302349, guid: 48dcafb5c89655343bb8fec3eb9b0d9b, type: 3}
+  - {fileID: 8843523463735302349, guid: 53e9621f457bc114ba68e9cf3c556b6b, type: 3}
+  - {fileID: 8843523463735302349, guid: 081c730bf57e75b4b8ed500d2adb3336, type: 3}
+  tutorialEmptyAmount: 2
+  spawnTutorial: 0
   levelStartLength: 16
   distanceSpawnChunk: 200
-  gameSpeed: 1
+  gameSpeed: 1.1
   speedIncreaseAmount: 0.1
   maxSpeed: 3.5
   timeInterval: 11

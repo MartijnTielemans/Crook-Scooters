@@ -31,7 +31,7 @@ public class MenuButton : MonoBehaviour
         canPress = false;
         yield return new WaitForSeconds(timer);
 
-        SceneManager.LoadScene("TestScene");
+        SceneManager.LoadScene("LoadingScreen");
     }
 
     IEnumerator HelpSequence()

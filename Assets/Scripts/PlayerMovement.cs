@@ -13,7 +13,6 @@ public class PlayerMovement : MonoBehaviour
     public Color playerColor;
     [SerializeField] MeshRenderer hatRenderer;
     [SerializeField] MeshRenderer scooterRenderer;
-    public bool canMove;
 
     [Space]
     [Header("Player Stats")]
@@ -23,6 +22,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float bounceForce = 250;
     [SerializeField] float gravity = 23;
     public bool active = true;
+    public bool canMove;
 
     [Space]
     [Header("Collisions")]
@@ -36,8 +36,18 @@ public class PlayerMovement : MonoBehaviour
     bool canCheckOnGround;
     [SerializeField] bool leftWall;
     bool rightWall;
+    BoxCollider boxCollider;
     RaycastHit groundCheckHit;
     RaycastHit wallHit;
+
+    [Space]
+    [Header("Animations")]
+    [SerializeField] GameObject model;
+    [SerializeField] string deathAnimationName;
+    [SerializeField] float tiltAmount = 10;
+    [SerializeField] float tiltSpeed = 5;
+    Vector3 currentTilt;
+    Animator anim;
 
     Vector2 moveInput;
     Vector2 currentInputVector;
@@ -50,6 +60,8 @@ public class PlayerMovement : MonoBehaviour
 
         InitialisePlayer();
         rb = GetComponent<Rigidbody>();
+        anim = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider>();
         onGround = true;
     }
 
@@ -59,11 +71,38 @@ public class PlayerMovement : MonoBehaviour
         {
             // Set onGround with a boxcast
             if (!onGround && canCheckOnGround)
+            {
                 onGround = CheckGround();
+            }
 
             // Check for walls
             leftWall = CheckWall(true);
             rightWall = CheckWall(false);
+
+            // For setting tilt animations
+            if (onGround)
+            {
+                // Change jump lilt animation back to 0
+                currentTilt.x = 0;
+
+                // For tilting player animation
+                if (moveInput.x < 0)
+                {
+                    currentTilt.z = -tiltAmount;
+                }
+                else if (moveInput.x > 0)
+                {
+                    currentTilt.z = tiltAmount;
+                }
+                else
+                {
+                    currentTilt.z = 0;
+                }
+            }
+
+            // Applies current tilt to model
+            Quaternion tilt = Quaternion.Euler(currentTilt);
+            model.transform.localRotation = Quaternion.Lerp(model.transform.localRotation, tilt, tiltSpeed * Time.deltaTime);
 
             // Check if a player is hit with the groundcheck and add force
             if (!onGround)
@@ -74,10 +113,6 @@ public class PlayerMovement : MonoBehaviour
                     rb.AddForce(Vector3.up * bounceForce);
                 }
             }
-        }
-        else if (!active)
-        {
-            // Do something
         }
     }
 
@@ -201,11 +236,17 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.Log("Player Died");
 
+        // Play death animation
+        anim.Play(deathAnimationName);
+
         // Set Player active bool
         active = false;
 
         // Stop player from inputting
         canMove = false;
+
+        // Call method to turn off collider and set offset
+        StartCoroutine(SetPlayerDeathLocation(.5f));
 
         // Check if only 1 player is still alive (Depending on single or multiplayer mode)
         if (manager.singleplayerMode)
@@ -235,6 +276,17 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Sets the players hitbox and gravity to false on death
+    IEnumerator SetPlayerDeathLocation(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+
+        transform.Translate(0, 0, -40);
+        boxCollider.enabled = false;
+        rb.useGravity = false;
+
+    }
+
     private void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
@@ -248,6 +300,9 @@ public class PlayerMovement : MonoBehaviour
             onGround = false;
             rb.AddForce(Vector3.up * jumpForce);
 
+            // For jump tilt animation
+            currentTilt.x = tiltAmount * 2;
+
             StartCoroutine(SetCanCheckOnGround());
         }
     }
@@ -256,7 +311,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            // Do stuff
+            // Get Stunned
         }
     }
 

@@ -37,6 +37,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] int spawnChanceDecreaseAmount = 2;
     [SerializeField] int minEmptySpawnChance = 20;
 
+    [Header("Tutorial Chunks")]
+    [SerializeField] GameObject[] tutorialParts;
+    [SerializeField] int tutorialEmptyAmount = 2;
+    [SerializeField] bool spawnTutorial;
+    bool canSetSpawnTutorial = true;
+
     [Space]
     [Header("Configurables")]
     [SerializeField] int levelStartLength;
@@ -63,11 +69,17 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // After join timer is over, set only spawn empty to false
-        // Also disable joining
-        if (Time.timeSinceLevelLoad >= playerJoinTimer && canJoin)
+        // After join timer is almost over, set only spawn empty to false and spawn tutorial to true
+        if (Time.timeSinceLevelLoad >= playerJoinTimer - 8 && !spawnTutorial && canSetSpawnTutorial)
         {
             onlySpawnEmpty = false;
+            spawnTutorial = true;
+            canSetSpawnTutorial = false;
+        }
+
+        // if joinTimer is actually over, disable joining
+        if (Time.timeSinceLevelLoad >= playerJoinTimer && canJoin)
+        {
             PlayerInputManager.instance.DisableJoining();
 
             // If no players joined, end the game
@@ -120,19 +132,38 @@ public class GameManager : MonoBehaviour
             // if onlySpawnEmpty is true, only spawn empty street chunks
             if (onlySpawnEmpty)
             {
-                SpawnChunk(0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                SpawnChunk(levelParts, 0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
             }
+            // If spawnTutorial is true, spawn all the parts of the tutorial with empty parts
+            else if (spawnTutorial)
+            {
+                for (int i = 0; i < tutorialParts.Length; i++)
+                {
+                    // Spawn the corresponding tutorial chunks
+                    SpawnChunk(tutorialParts, i, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+
+                    // Spawn empty street chunks
+                    for (int j = 0; j < tutorialEmptyAmount; j++)
+                    {
+                        SpawnChunk(levelParts, 0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                    }
+                }
+
+                // Turn spawnTutorial off
+                spawnTutorial = false;
+            }
+            // Else, spawn normally
             else
             {
                 // If in the range of 10, spawns any random chunk
                 int rnd = Random.Range(0, emptyChunkSpawnChance);
                 if (rnd >= 0 && rnd <= 10)
                 {
-                    SpawnChunk(RandomChunkNumber(), spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                    SpawnChunk(levelParts, RandomChunkNumber(), spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
                 }
                 else
                 {
-                    SpawnChunk(0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                    SpawnChunk(levelParts, 0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
                 }
             }
         }
@@ -147,20 +178,20 @@ public class GameManager : MonoBehaviour
     // Spawns the beginning chunks of the level
     void SpawnLevelStart()
     {
-        SpawnChunk(0, chunkParent.transform.position);
+        SpawnChunk(levelParts, 0, chunkParent.transform.position);
 
         for (int i = 1; i < levelStartLength; i++)
         {
             // Grabs the previous chunk's spawnpoint
-            SpawnChunk(0, spawnedChunks[i -1].transform.Find("SpawnPoint").transform.position);
+            SpawnChunk(levelParts, 0, spawnedChunks[i -1].transform.Find("SpawnPoint").transform.position);
         }
     }
 
     // Spawns a level chunk at the given location
-    public Transform SpawnChunk(int i, Vector3 spawnPosition)
+    public Transform SpawnChunk(GameObject[] collection, int i, Vector3 spawnPosition)
     {
         Quaternion rotation = Quaternion.Euler(new Vector3(0, 180, 0));
-        GameObject chunk = Instantiate(levelParts[i], spawnPosition, Quaternion.identity * rotation, chunkParent.transform);
+        GameObject chunk = Instantiate(collection[i], spawnPosition, Quaternion.identity * rotation, chunkParent.transform);
         spawnedChunks.Add(chunk);
         return chunk.transform.Find("SpawnPoint");
     }

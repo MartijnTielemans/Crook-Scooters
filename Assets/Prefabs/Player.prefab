@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 950208211796973143}
   - component: {fileID: 950208211796973142}
   - component: {fileID: 950208211796973141}
+  - component: {fileID: 4116721408672848597}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -28,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950208211796973145}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.5799999, z: -1.52}
+  m_LocalPosition: {x: 0, y: 2.06, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 950208211839831330}
@@ -62,13 +63,13 @@ MonoBehaviour:
   playerColor: {r: 0, g: 0, b: 0, a: 0}
   hatRenderer: {fileID: 338216790819747804}
   scooterRenderer: {fileID: 4086967393361347128}
-  canMove: 0
   moveSpeed: 7
   inputSmoothing: 0.25
   jumpForce: 900
   bounceForce: 250
   gravity: 23
   active: 1
+  canMove: 0
   groundCheck: {fileID: 950208212514248919}
   wallCheckLeft: {fileID: 950208213560656522}
   wallCheckRight: {fileID: 950208212747422765}
@@ -83,6 +84,10 @@ MonoBehaviour:
     m_Bits: 192
   onGround: 0
   leftWall: 0
+  model: {fileID: 3419998556678394091}
+  deathAnimationName: Player_Died
+  tiltAmount: 10
+  tiltSpeed: 9
 --- !u!65 &950208211796973143
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -174,6 +179,25 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!95 &4116721408672848597
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950208211796973145}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 205306d57ded3a64ea8a38422c835abd, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &950208211839831331
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,6 +418,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
+--- !u!1 &3419998556678394091 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4240451765682909730, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
+  m_PrefabInstance: {fileID: 1562567620201226953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &3419998556678394090 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4240451765682909731, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
