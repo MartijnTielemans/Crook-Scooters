@@ -314,7 +314,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            // Get Stunned
+            Debug.Log("Player");
         }
     }
 

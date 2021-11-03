@@ -16,7 +16,6 @@ public class CarScript : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Obstacle"))
         {
-            Debug.Log("Car Hit obstacle");
             moveSpeed = new Vector3(0, 0, 0);
         }
     }
