@@ -49,6 +49,8 @@ public class PlayerMovement : MonoBehaviour
     Vector3 currentTilt;
     Animator anim;
 
+    [SerializeField] ParticleSystem hitParticle;
+
     Vector2 moveInput;
     Vector2 currentInputVector;
     Vector2 inputVelocity;
@@ -236,8 +238,9 @@ public class PlayerMovement : MonoBehaviour
     {
         Debug.Log("Player Died");
 
-        // Play death animation
+        // Play death animation and particle
         anim.Play(deathAnimationName);
+        hitParticle.Play();
 
         // Set Player active bool
         active = false;
