@@ -21,8 +21,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float jumpForce = 900;
     [SerializeField] float bounceForce = 250;
     [SerializeField] float gravity = 23;
+    [SerializeField] float stunTime = 1.2f;
     public bool active = true;
     public bool canMove;
+    [SerializeField] bool stunned;
 
     [Space]
     [Header("Collisions")]
@@ -50,6 +52,7 @@ public class PlayerMovement : MonoBehaviour
     Animator anim;
 
     [SerializeField] ParticleSystem hitParticle;
+    [SerializeField] ParticleSystem stunParticle;
 
     Vector2 moveInput;
     Vector2 currentInputVector;
@@ -82,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
             rightWall = CheckWall(false);
 
             // For setting tilt animations
-            if (onGround)
+            if (onGround && !stunned)
             {
                 // Change jump lilt animation back to 0
                 currentTilt.x = 0;
@@ -101,6 +104,10 @@ public class PlayerMovement : MonoBehaviour
                     currentTilt.z = 0;
                 }
             }
+            else if  (onGround && stunned)
+            {
+                currentTilt.x = tiltAmount * 2;
+            }
 
             // Applies current tilt to model
             Quaternion tilt = Quaternion.Euler(currentTilt);
@@ -113,6 +120,9 @@ public class PlayerMovement : MonoBehaviour
                 {
                     rb.velocity = Vector3.zero;
                     rb.AddForce(Vector3.up * bounceForce);
+
+                    // Cause stun on other player
+                    groundCheckHit.collider.gameObject.GetComponent<PlayerMovement>().GetStunned(stunTime);
                 }
             }
         }
@@ -234,6 +244,25 @@ public class PlayerMovement : MonoBehaviour
         scooterRenderer.material.color = playerColor;
     }
 
+    // Called when a player jumps on this player
+    // Calls a coroutine which handles the actual stun and timer
+    public void GetStunned(float stunTime)
+    {
+        StartCoroutine(StunTimer(stunTime));
+    }
+
+    // Sets canmove before and after timer
+    IEnumerator StunTimer(float stunTime)
+    {
+        canMove = false;
+        stunParticle.Play();
+
+        yield return new WaitForSeconds(stunTime);
+
+        canMove = true;
+        stunParticle.Stop();
+    }
+
     void PlayerDeath()
     {
         Debug.Log("Player Died");
@@ -307,14 +336,6 @@ public class PlayerMovement : MonoBehaviour
             currentTilt.x = tiltAmount * 2;
 
             StartCoroutine(SetCanCheckOnGround());
-        }
-    }
-
-    private void OnCollisionEnter(Collision col)
-    {
-        if (col.gameObject.CompareTag("Player"))
-        {
-            Debug.Log("Player");
         }
     }
 
