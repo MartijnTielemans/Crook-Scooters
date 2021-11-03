@@ -118,11 +118,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (CheckPlayerJump())
                 {
-                    rb.velocity = Vector3.zero;
-                    rb.AddForce(Vector3.up * bounceForce);
-
-                    // Cause stun on other player
-                    groundCheckHit.collider.gameObject.GetComponent<PlayerMovement>().GetStunned(stunTime);
+                    // Call JumpOnPlayer
+                    JumpOnPlayer();
                 }
             }
         }
@@ -159,15 +156,25 @@ public class PlayerMovement : MonoBehaviour
     // Check for ground collision
     bool CheckGround()
     {
-        bool hit = Physics.BoxCast(groundCheck.bounds.center, groundCheck.bounds.size, Vector3.down, out groundCheckHit, groundCheck.transform.rotation, 1, groundMask);
+        bool hit = Physics.BoxCast(groundCheck.bounds.center, groundCheck.bounds.size, Vector3.down, out groundCheckHit, groundCheck.transform.rotation, 1.2f, groundMask);
         return hit;
     }
 
     // Check if there is another player below the players
     bool CheckPlayerJump()
     {
-        bool hit = Physics.BoxCast(groundCheck.bounds.center, groundCheck.bounds.size, Vector3.down, out groundCheckHit, groundCheck.transform.rotation, 1, playerMask);
+        bool hit = Physics.BoxCast(groundCheck.bounds.center, groundCheck.bounds.size, Vector3.down, out groundCheckHit, groundCheck.transform.rotation, 1.2f, playerMask);
         return hit;
+    }
+
+    // Called when the player jumps on another player
+    void JumpOnPlayer()
+    {
+        rb.velocity = Vector3.zero;
+        rb.AddForce(Vector3.up * bounceForce);
+
+        // Cause stun on other player
+        groundCheckHit.collider.gameObject.GetComponent<PlayerMovement>().GetStunned(stunTime);
     }
 
     void MovePlayer()
