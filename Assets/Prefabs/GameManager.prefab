@@ -63,6 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveScript: {fileID: 0}
+  cameraAnim: {fileID: 0}
   singleplayerMode: 0
   godMode: 0
   gameOver: 0
@@ -109,7 +110,7 @@ MonoBehaviour:
   - {fileID: 8843523463735302349, guid: 081c730bf57e75b4b8ed500d2adb3336, type: 3}
   tutorialEmptyAmount: 2
   spawnTutorial: 0
-  levelStartLength: 16
+  levelStartLength: 35
   distanceSpawnChunk: 200
   gameSpeed: 1.1
   speedIncreaseAmount: 0.1

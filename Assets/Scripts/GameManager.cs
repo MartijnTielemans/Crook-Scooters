@@ -7,8 +7,10 @@ using UnityEngine.SceneManagement;
 [RequireComponent(typeof(UIManager))]
 public class GameManager : MonoBehaviour
 {
+    [Header("References")]
     UIManager uiManager;
     [SerializeField] MoveObjectScript moveScript;
+    [SerializeField] Animator cameraAnim;
     Vector3 originalMoveSpeed;
 
     [Space]
@@ -37,7 +39,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] int spawnChanceDecreaseAmount = 2;
     [SerializeField] int minEmptySpawnChance = 20;
 
-    [Header("Tutorial Chunks")]
+    [Header("Tutorial Chunk Spawning")]
     [SerializeField] GameObject[] tutorialParts;
     [SerializeField] int tutorialEmptyAmount = 2;
     [SerializeField] bool spawnTutorial;
@@ -98,9 +100,13 @@ public class GameManager : MonoBehaviour
             }
 
             // Set UI animation to leave if there are players
+            // Also trigger camera change
             if (players.Count != 0)
             {
                 uiManager.JoinCanvasAnimation("JoinUI_Leave");
+
+                // Set the camera mode
+                cameraAnim.SetTrigger("CameraSwitch");
             }
 
             // Set every player's canMove to true
