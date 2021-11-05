@@ -227,6 +227,9 @@ public class GameManager : MonoBehaviour
             ChangeMoveSpeed(gameSpeed);
         }
 
+        // Play speedlines effect
+        uiManager.PlaySpeedLines();
+
         // Set the next time milestone
         currentTimeMilestone += timeInterval;
     }

@@ -14,6 +14,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI gameTimerText;
     [SerializeField] TextMeshProUGUI gameEndText;
 
+    [SerializeField] Animator speedLinesAnim;
+
     public void JoinCanvasAnimation(string anim)
     {
         joinCanvas.GetComponent<Animator>().Play(anim);
@@ -43,5 +45,10 @@ public class UIManager : MonoBehaviour
     {
         gameEndText.enabled = true;
         gameEndText.text = text;
+    }
+
+    public void PlaySpeedLines()
+    {
+        speedLinesAnim.Play("Speedlines_Flash");
     }
 }
