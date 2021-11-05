@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuButton : MonoBehaviour
 {
+    [SerializeField] GameObject transition;
     [SerializeField] float timer = .5f;
     bool canPress = true;
 
@@ -31,6 +32,9 @@ public class MenuButton : MonoBehaviour
         canPress = false;
         yield return new WaitForSeconds(timer);
 
+        transition.GetComponent<Animator>().Play("Transition_In");
+        yield return new WaitForSeconds(.6f);
+
         SceneManager.LoadScene("LoadingScreen");
     }
 
@@ -39,6 +43,9 @@ public class MenuButton : MonoBehaviour
         canPress = false;
         yield return new WaitForSeconds(timer);
 
+        transition.GetComponent<Animator>().Play("Transition_In");
+        yield return new WaitForSeconds(.6f);
+
         SceneManager.LoadScene("HelpScene");
     }
 
@@ -46,6 +53,9 @@ public class MenuButton : MonoBehaviour
     {
         canPress = false;
         yield return new WaitForSeconds(timer);
+
+        transition.GetComponent<Animator>().Play("Transition_In");
+        yield return new WaitForSeconds(.6f);
 
         Application.Quit();
     }

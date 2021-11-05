@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class LoadingScreen : MonoBehaviour
 {
+    [SerializeField] GameObject transition;
     [SerializeField] string sceneToLoad;
     [SerializeField] float timer = 4;
 
@@ -17,6 +18,9 @@ public class LoadingScreen : MonoBehaviour
     IEnumerator LoadScene(float timer)
     {
         yield return new WaitForSeconds(timer);
+
+        transition.GetComponent<Animator>().Play("Transition_In");
+        yield return new WaitForSeconds(.6f);
 
         SceneManager.LoadScene(sceneToLoad);
     }

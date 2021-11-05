@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI joinTimerText;
     [SerializeField] TextMeshProUGUI playersJoinedText;
     [SerializeField] TextMeshProUGUI gameTimerText;
+    [SerializeField] TextMeshProUGUI gameEndText;
 
     public void JoinCanvasAnimation(string anim)
     {
@@ -36,5 +37,11 @@ public class UIManager : MonoBehaviour
     public void DisplayGameTimer(float value)
     {
         gameTimerText.text = value.ToString("F1");
+    }
+
+    public void ShowGameEndText(string text)
+    {
+        gameEndText.enabled = true;
+        gameEndText.text = text;
     }
 }

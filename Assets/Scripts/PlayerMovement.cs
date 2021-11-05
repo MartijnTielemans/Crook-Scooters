@@ -272,8 +272,6 @@ public class PlayerMovement : MonoBehaviour
 
     void PlayerDeath()
     {
-        Debug.Log("Player Died");
-
         // Play death animation and particle
         anim.Play(deathAnimationName);
         hitParticle.Play();

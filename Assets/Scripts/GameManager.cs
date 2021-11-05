@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     UIManager uiManager;
     [SerializeField] MoveObjectScript moveScript;
     [SerializeField] Animator cameraAnim;
+    [SerializeField] GameObject transition;
     Vector3 originalMoveSpeed;
 
     [Space]
@@ -257,7 +258,14 @@ public class GameManager : MonoBehaviour
             }
             else if (!singleplayerMode)
             {
-                StartCoroutine(GameEndSequenceMultiplayer(endSequenceTimer));
+                int finalPlayer = 0;
+                for (int i = 0; i < players.Count; i++)
+                {
+                    if (players[i].active)
+                        finalPlayer = i +1;
+                }
+
+                StartCoroutine(GameEndSequenceMultiplayer(endSequenceTimer, finalPlayer));
             }
         }
     }
@@ -269,20 +277,33 @@ public class GameManager : MonoBehaviour
         uiManager.DisplayPlayersJoinedText("It was quiet that night...");
 
         yield return new WaitForSeconds(timer);
+        yield return StartCoroutine(GameEndTransition());
         SceneManager.LoadScene("MainMenu");
     }
 
     // Game end in singleplayer mode
     IEnumerator GameEndSequenceSingleplayer(float timer)
     {
+        uiManager.ShowGameEndText("You Got Busted!");
+
         yield return new WaitForSeconds(timer);
+        yield return StartCoroutine(GameEndTransition());
         SceneManager.LoadScene("MainMenu");
     }
 
     // Game end in multiplayer mode
-    IEnumerator GameEndSequenceMultiplayer(float timer)
+    IEnumerator GameEndSequenceMultiplayer(float timer, int finalPlayer)
     {
+        uiManager.ShowGameEndText("Player " + finalPlayer + " Wins!");
+
         yield return new WaitForSeconds(timer);
+        yield return StartCoroutine(GameEndTransition());
         SceneManager.LoadScene("MainMenu");
+    }
+
+    IEnumerator GameEndTransition()
+    {
+        transition.GetComponent<Animator>().Play("Transition_In");
+        yield return new WaitForSeconds(.6f);
     }
 }

@@ -69,7 +69,7 @@ MonoBehaviour:
   gameOver: 0
   canJoin: 0
   playerPrefab: {fileID: 950208211796973145, guid: 32c68e5bc464c4e43a030889b2376e82, type: 3}
-  playerJoinTimer: 10
+  playerJoinTimer: 10.5
   spawnLocations:
   - {x: -4, y: 1.2, z: -1.52}
   - {x: -1.35, y: 1.2, z: -1.52}
@@ -116,7 +116,7 @@ MonoBehaviour:
   speedIncreaseAmount: 0.1
   maxSpeed: 3.5
   timeInterval: 11
-  endSequenceTimer: 5
+  endSequenceTimer: 7
 --- !u!114 &371001018855357412
 MonoBehaviour:
   m_ObjectHideFlags: 0

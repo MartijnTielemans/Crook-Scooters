@@ -6,18 +6,23 @@ using UnityEngine.InputSystem;
 
 public class SceneChanger : MonoBehaviour
 {
+    [SerializeField] GameObject transition;
+
     public void OnSumbit()
     {
-        LoadScene();
+        StartCoroutine(LoadScene());
     }
 
     public void OnCancel()
     {
-        LoadScene();
+        StartCoroutine(LoadScene());
     }
 
-    void LoadScene()
+    IEnumerator LoadScene()
     {
+        transition.GetComponent<Animator>().Play("Transition_In");
+        yield return new WaitForSeconds(.6f);
+
         SceneManager.LoadScene("MainMenu");
     }
 }
