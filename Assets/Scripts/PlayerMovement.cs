@@ -106,7 +106,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else if  (onGround && stunned)
             {
-                currentTilt.x = tiltAmount * 2;
+                currentTilt.x = tiltAmount * 2.5f;
             }
 
             // Applies current tilt to model
@@ -258,15 +258,17 @@ public class PlayerMovement : MonoBehaviour
         StartCoroutine(StunTimer(stunTime));
     }
 
-    // Sets canmove before and after timer
+    // Sets canmove and stunned before and after timer
     IEnumerator StunTimer(float stunTime)
     {
         canMove = false;
+        stunned = true;
         stunParticle.Play();
 
         yield return new WaitForSeconds(stunTime);
 
         canMove = true;
+        stunned = false;
         stunParticle.Stop();
     }
 
@@ -331,7 +333,7 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump()
     {
-        if (onGround && active)
+        if (onGround && active && !stunned)
         {
             canCheckOnGround = false;
             onGround = false;
