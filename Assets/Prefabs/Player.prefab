@@ -66,6 +66,7 @@ MonoBehaviour:
   scooterRenderer: {fileID: 4086967393361347128}
   moveSpeed: 7
   inputSmoothing: 0.25
+  aerialInputSmoothing: 1.4
   jumpForce: 900
   bounceForce: 250
   gravity: 23

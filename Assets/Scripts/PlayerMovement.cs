@@ -17,7 +17,8 @@ public class PlayerMovement : MonoBehaviour
     [Space]
     [Header("Player Stats")]
     [SerializeField] float moveSpeed = 7;
-    [SerializeField] float inputSmoothing = 1.5f;
+    [SerializeField] float inputSmoothing = 0.25f;
+    [SerializeField] float aerialInputSmoothing = 1.4f;
     [SerializeField] float jumpForce = 900;
     [SerializeField] float bounceForce = 250;
     [SerializeField] float gravity = 23;
@@ -182,10 +183,14 @@ public class PlayerMovement : MonoBehaviour
         // Can't move if touching a wall
         if (!leftWall && moveInput.x < 0 || !rightWall && moveInput.x > 0 || !leftWall && !rightWall && moveInput.x == 0)
         {
-            // Only update currentInputVector when on the ground
+            // Only update currentInputVector with normal smoothing when on the ground
             if (onGround)
             {
                 currentInputVector = Vector2.SmoothDamp(currentInputVector, moveInput, ref inputVelocity, inputSmoothing);
+            }
+            else if (!onGround && moveInput.x !=0)
+            {
+                currentInputVector = Vector2.SmoothDamp(currentInputVector, moveInput, ref inputVelocity, aerialInputSmoothing);
             }
 
             Vector3 movement = new Vector3(currentInputVector.x, 0, 0);
