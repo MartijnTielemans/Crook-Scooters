@@ -50,6 +50,8 @@ MonoBehaviour:
   joinTimerText: {fileID: 0}
   playersJoinedText: {fileID: 0}
   gameTimerText: {fileID: 0}
+  gameEndText: {fileID: 0}
+  speedLinesAnim: {fileID: 0}
 --- !u!114 &2165343977409280405
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,6 +66,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveScript: {fileID: 0}
   cameraAnim: {fileID: 0}
+  transition: {fileID: 0}
   singleplayerMode: 0
   godMode: 0
   gameOver: 0
@@ -100,6 +103,7 @@ MonoBehaviour:
   - {fileID: 8843523463735302349, guid: 7cabf18e9131c4046b31bad0a1865066, type: 3}
   - {fileID: 8843523463735302349, guid: 0d5bbf386868c554d8745228b056c7dd, type: 3}
   - {fileID: 8843523463735302349, guid: 74553a30faed16e4da39152797430ff7, type: 3}
+  - {fileID: 8843523463735302349, guid: 081c730bf57e75b4b8ed500d2adb3336, type: 3}
   onlySpawnEmpty: 1
   emptyChunkSpawnChance: 26
   spawnChanceDecreaseAmount: 2
@@ -113,7 +117,7 @@ MonoBehaviour:
   levelStartLength: 35
   distanceSpawnChunk: 200
   gameSpeed: 1.1
-  speedIncreaseAmount: 0.1
+  speedIncreaseAmount: 0.18
   maxSpeed: 3.5
   timeInterval: 11
   endSequenceTimer: 7
