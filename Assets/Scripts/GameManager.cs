@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public bool singleplayerMode;
     public bool godMode;
     public bool gameOver;
+    int timesIntensityChanged;
 
     [Space]
     [Header("Player Joining")]
@@ -39,6 +40,13 @@ public class GameManager : MonoBehaviour
     public int emptyChunkSpawnChance = 26;
     [SerializeField] int spawnChanceDecreaseAmount = 2;
     [SerializeField] int minEmptySpawnChance = 20;
+
+    [Space]
+    [SerializeField] int maxEmptyChunksInRow = 6;
+    [SerializeField] int minMaxEmptyChunksInRow = 4;
+    [SerializeField] int decreaseEmptyChunksInRowInterval = 5;
+    [SerializeField] int currentEmptyChunksInRow;
+    int currentDecreaseEmptyChunksInRowInterval;
 
     [Header("Tutorial Chunk Spawning")]
     [SerializeField] GameObject[] tutorialParts;
@@ -63,6 +71,7 @@ public class GameManager : MonoBehaviour
 
         originalMoveSpeed = moveScript.moveSpeed;
         currentTimeMilestone = timeInterval + playerJoinTimer;
+        currentDecreaseEmptyChunksInRowInterval = decreaseEmptyChunksInRowInterval;
         canJoin = true;
 
         SpawnLevelStart();
@@ -159,18 +168,40 @@ public class GameManager : MonoBehaviour
                 // Turn spawnTutorial off
                 spawnTutorial = false;
             }
-            // Else, spawn normally
+            // Else, spawn using the normal spawn system
             else
             {
-                // If in the range of 10, spawns any random chunk
-                int rnd = Random.Range(0, emptyChunkSpawnChance);
-                if (rnd >= 0 && rnd <= 10)
+                int randomChunk = RandomChunkNumber();
+
+                // If max number of empty chunks in a row has been reached, only spawn other chunks
+                if (currentEmptyChunksInRow >= maxEmptyChunksInRow)
                 {
-                    SpawnChunk(levelParts, RandomChunkNumber(), spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                    Debug.Log("Max amount of empty chunks.");
+
+                    SpawnChunk(levelParts, randomChunk, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+
+                    // Reset currentEmptyChunksInRow if chunk was not 0
+                    if (randomChunk != 0)
+                        currentEmptyChunksInRow = 0;
                 }
                 else
                 {
-                    SpawnChunk(levelParts, 0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+                    // If in the range of 10, spawns any random chunk
+                    int rnd = Random.Range(0, emptyChunkSpawnChance);
+                    if (rnd >= 0 && rnd <= 10)
+                    {
+                        SpawnChunk(levelParts, randomChunk, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+
+                        // Reset currentEmptyChunksInRow if chunk was not 0
+                        if (randomChunk != 0)
+                            currentEmptyChunksInRow = 0;
+                    }
+                    else
+                    {
+                        SpawnChunk(levelParts, 0, spawnedChunks[spawnedChunks.Count - 1].transform.Find("SpawnPoint").transform.position);
+
+                        currentEmptyChunksInRow++;
+                    }
                 }
             }
         }
@@ -227,11 +258,24 @@ public class GameManager : MonoBehaviour
             ChangeMoveSpeed(gameSpeed);
         }
 
+        // Set max empty chunks in row
+        if (timesIntensityChanged == currentDecreaseEmptyChunksInRowInterval)
+        {
+            if (maxEmptyChunksInRow > minMaxEmptyChunksInRow)
+            {
+                maxEmptyChunksInRow--;
+                currentDecreaseEmptyChunksInRowInterval += decreaseEmptyChunksInRowInterval;
+            }
+        }
+
         // Play speedlines effect
         uiManager.PlaySpeedLines();
 
         // Set the next time milestone
         currentTimeMilestone += timeInterval;
+
+        // Add to timesIntensityChanged
+        timesIntensityChanged++;
     }
 
     void ChangeMoveSpeed(float speed)
