@@ -22,6 +22,10 @@ public class GameManager : MonoBehaviour
     int timesIntensityChanged;
 
     [Space]
+    public bool checkingForTie;
+    public bool tied;
+
+    [Space]
     [Header("Player Joining")]
     [SerializeField] bool canJoin;
     public GameObject playerPrefab;
@@ -341,7 +345,14 @@ public class GameManager : MonoBehaviour
     // Game end in multiplayer mode
     IEnumerator GameEndSequenceMultiplayer(float timer, int finalPlayer)
     {
-        uiManager.ShowGameEndText("Player " + finalPlayer + " Wins!");
+        if (tied)
+        {
+            uiManager.ShowGameEndText("You all got busted!");
+        }
+        else
+        {
+            uiManager.ShowGameEndText("Player " + finalPlayer + " Wins!");
+        }
 
         yield return new WaitForSeconds(timer);
         yield return StartCoroutine(GameEndTransition());

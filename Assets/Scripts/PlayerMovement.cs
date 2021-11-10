@@ -302,7 +302,7 @@ public class PlayerMovement : MonoBehaviour
         {
             int actives = 0;
 
-            // Got through every player, check if they are still active
+            // Go through every player, check if they are still active
             for (int i = 0; i < manager.players.Count; i++)
             {
                 if (manager.players[i].active)
@@ -314,8 +314,16 @@ public class PlayerMovement : MonoBehaviour
             // If there is only 1 active player
             if (actives == 1)
             {
-                // Start game end sequence
-                manager.GameEnd(false);
+                StartCoroutine(LastPlayerLeftSequence());
+            }
+            // If the player died after the last player is left while still checking for a tie, set tied to true
+            else if (actives == 0)
+            {
+                // Set the game to tied if a player dies while checking for tie
+                if (manager.checkingForTie)
+                {
+                    manager.tied = true;
+                }
             }
         }
     }
@@ -329,6 +337,23 @@ public class PlayerMovement : MonoBehaviour
         boxCollider.enabled = false;
         rb.useGravity = false;
 
+    }
+
+    // Called when the last player remains in multiplayer
+    IEnumerator LastPlayerLeftSequence()
+    {
+        // Checks if there is a tie
+        yield return StartCoroutine(CheckForTie(0.4f));
+
+        // Start game end sequence
+        manager.GameEnd(false);
+    }
+
+    IEnumerator CheckForTie(float timer)
+    {
+        manager.checkingForTie = true;
+        yield return new WaitForSeconds(timer);
+        manager.checkingForTie = false;
     }
 
     private void OnMove(InputValue value)
