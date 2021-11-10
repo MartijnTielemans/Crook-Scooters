@@ -182,7 +182,7 @@ MonoBehaviour:
     m_ActionName: UI/Cancel[/Keyboard/escape]
   m_NeverAutoSwitchControlSchemes: 1
   m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
+  m_DefaultActionMap: 23074593-1dc0-4ffc-b0fe-6c1aaff59719
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
 --- !u!95 &4116721408672848597

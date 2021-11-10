@@ -376,6 +376,16 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    void OnStart()
+    {
+        // If quick restart is enabled, if a player presses start button, restart
+        if (manager.canQuickRestart)
+        {
+            Debug.Log("Called quick restart");
+            manager.QuickRestart();
+        }
+    }
+
     private void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.CompareTag("Obstacle"))

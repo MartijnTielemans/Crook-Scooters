@@ -14,6 +14,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI gameTimerText;
     [SerializeField] TextMeshProUGUI gameEndText;
 
+    [SerializeField] Animator quickRestartCanvas;
     [SerializeField] Animator speedLinesAnim;
 
     public void JoinCanvasAnimation(string anim)
@@ -45,6 +46,11 @@ public class UIManager : MonoBehaviour
     {
         gameEndText.enabled = true;
         gameEndText.text = text;
+    }
+
+    public void ShowQuickRestartCanvas()
+    {
+        quickRestartCanvas.Play("QuickRestart_In");
     }
 
     public void PlaySpeedLines()

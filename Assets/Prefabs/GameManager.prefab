@@ -51,6 +51,7 @@ MonoBehaviour:
   playersJoinedText: {fileID: 0}
   gameTimerText: {fileID: 0}
   gameEndText: {fileID: 0}
+  quickRestartCanvas: {fileID: 0}
   speedLinesAnim: {fileID: 0}
 --- !u!114 &2165343977409280405
 MonoBehaviour:
@@ -70,6 +71,9 @@ MonoBehaviour:
   singleplayerMode: 0
   godMode: 0
   gameOver: 0
+  canQuickRestart: 0
+  checkingForTie: 0
+  tied: 0
   canJoin: 0
   playerPrefab: {fileID: 950208211796973145, guid: 32c68e5bc464c4e43a030889b2376e82, type: 3}
   playerJoinTimer: 10.5
@@ -108,6 +112,10 @@ MonoBehaviour:
   emptyChunkSpawnChance: 26
   spawnChanceDecreaseAmount: 2
   minEmptySpawnChance: 20
+  maxEmptyChunksInRow: 6
+  minMaxEmptyChunksInRow: 4
+  decreaseEmptyChunksInRowInterval: 5
+  currentEmptyChunksInRow: 0
   tutorialParts:
   - {fileID: 8843523463735302349, guid: 48dcafb5c89655343bb8fec3eb9b0d9b, type: 3}
   - {fileID: 8843523463735302349, guid: 53e9621f457bc114ba68e9cf3c556b6b, type: 3}
@@ -184,6 +192,46 @@ MonoBehaviour:
       - m_Name: 
         m_Id: b02a5067-fdbe-40a3-9435-afff6d69f328
         m_Path: <Gamepad>/start
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+      - m_Name: 
+        m_Id: b2ba3ed0-1fd5-4492-959a-e71407cecfbf
+        m_Path: <Gamepad>/buttonEast
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+      - m_Name: 
+        m_Id: c9a9de02-eee2-41e9-a340-458fa8ddcc3b
+        m_Path: <Gamepad>/buttonWest
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+      - m_Name: 
+        m_Id: 992162c3-3a08-452a-9ab9-504b47788597
+        m_Path: <Gamepad>/buttonNorth
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+      - m_Name: 
+        m_Id: 86e12b3b-b43a-487a-b1d8-9c3199911c73
+        m_Path: <Gamepad>/buttonSouth
+        m_Interactions: 
+        m_Processors: 
+        m_Groups: 
+        m_Action: Join
+        m_Flags: 0
+      - m_Name: 
+        m_Id: ec092f12-c58f-47b5-8229-444db72ab76e
+        m_Path: <Keyboard>/z
         m_Interactions: 
         m_Processors: 
         m_Groups: 

@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
     public bool singleplayerMode;
     public bool godMode;
     public bool gameOver;
+    public bool canQuickRestart;
     int timesIntensityChanged;
 
     [Space]
@@ -297,6 +298,10 @@ public class GameManager : MonoBehaviour
     {
         gameOver = true;
 
+        // Show the quick restart message
+        uiManager.ShowQuickRestartCanvas();
+        StartCoroutine(WaitForRestartInputDelay(1.1f));
+
         if (premature)
         {
             StartCoroutine(GameEndSequencePremature(endSequenceTimer));
@@ -359,9 +364,30 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu");
     }
 
+    IEnumerator WaitForRestartInputDelay(float timer)
+    {
+        yield return new WaitForSeconds(timer);
+        canQuickRestart = true;
+    }
+
     IEnumerator GameEndTransition()
     {
         transition.GetComponent<Animator>().Play("Transition_In");
         yield return new WaitForSeconds(.6f);
+    }
+
+    // Quickly restarts the game without the need for going to the main menu
+    public void QuickRestart()
+    {
+        Debug.Log("doing quick restart");
+        StartCoroutine(QuickRestartSequence());
+    }
+
+    IEnumerator QuickRestartSequence()
+    {
+        yield return new WaitForSeconds(.8f);
+        transition.GetComponent<Animator>().Play("Transition_In");
+        yield return new WaitForSeconds(.6f);
+        SceneManager.LoadScene("TestScene");
     }
 }
