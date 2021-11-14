@@ -128,6 +128,7 @@ public class GameManager : MonoBehaviour
             for (int i = 0; i < players.Count; i++)
             {
                 players[i].canMove = true;
+                players[i].tauntIntro = false;
             }
 
             canJoin = false;

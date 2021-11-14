@@ -25,6 +25,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float stunTime = 1.2f;
     public bool active = true;
     public bool canMove;
+    [SerializeField] bool canJump;
+    public bool tauntIntro;
     [SerializeField] bool stunned;
 
     [Space]
@@ -49,11 +51,13 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] string deathAnimationName;
     [SerializeField] float tiltAmount = 10;
     [SerializeField] float tiltSpeed = 5;
+    [SerializeField] float tauntTime = 2.2f;
     Vector3 currentTilt;
     Animator anim;
 
     [SerializeField] ParticleSystem hitParticle;
     [SerializeField] ParticleSystem stunParticle;
+    [SerializeField] ParticleSystem[] tauntParticles;
 
     Vector2 moveInput;
     Vector2 currentInputVector;
@@ -68,7 +72,6 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         anim = GetComponent<Animator>();
         boxCollider = GetComponent<BoxCollider>();
-        onGround = true;
     }
 
     private void Update()
@@ -88,26 +91,34 @@ public class PlayerMovement : MonoBehaviour
             // For setting tilt animations
             if (onGround && !stunned)
             {
-                // Change jump lilt animation back to 0
+                // Change jump tilt animation back to 0
                 currentTilt.x = 0;
 
-                // For tilting player animation
+                // For moving tilting player animation
                 if (moveInput.x < 0)
                 {
-                    currentTilt.z = -tiltAmount;
+                    currentTilt.z = tiltAmount;
                 }
                 else if (moveInput.x > 0)
                 {
-                    currentTilt.z = tiltAmount;
+                    currentTilt.z = -tiltAmount;
                 }
                 else
                 {
                     currentTilt.z = 0;
                 }
+
+                // Check if player is inputting down
+                if (moveInput.y < 0)
+                {
+                    // if so, call Taunt
+                    Taunt();
+                }
             }
             else if  (onGround && stunned)
             {
-                currentTilt.x = tiltAmount * 2.5f;
+                // If stunned and on ground, change player tilt
+                currentTilt.x = tiltAmount * -2.5f;
             }
 
             // Applies current tilt to model
@@ -205,43 +216,47 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Called when a player presses down while grounded
+    void Taunt()
+    {
+        // Set canMove and canJump to false for the taunt
+        canMove = false;
+        canJump = false;
+        StartCoroutine(TauntSequence(tauntTime));
+    }
+
+    IEnumerator TauntSequence(float timer)
+    {
+        // Play animation
+        anim.Play("Player_Taunt");
+        // Play particle effect
+        for (int i = 0; i < tauntParticles.Length; i++)
+        {
+            tauntParticles[i].Play();
+        }
+
+        yield return new WaitForSeconds(timer);
+
+        // Set movement to 0
+        currentInputVector.x = 0;
+
+        // Set canMove if not in the player join phase
+        if (!tauntIntro)
+            canMove = true;
+
+        canJump = true;
+
+        // Stop particle effect
+        for (int i = 0; i < tauntParticles.Length; i++)
+        {
+            tauntParticles[i].Stop();
+        }
+    }
+
     IEnumerator SetCanCheckOnGround()
     {
         yield return new WaitForSeconds(0.4f);
         canCheckOnGround = true;
-    }
-
-    // Sets initial values like location and color
-    void InitialisePlayer()
-    {
-        int playersJoined = PlayerInputManager.instance.playerCount-1;
-        manager.players.Add(gameObject.GetComponent<PlayerMovement>());
-
-        switch (playersJoined)
-        {
-            case 0:
-                SetLocation(manager.spawnLocations[0]);
-                ChangeColor(possibleColors[0]);
-                break;
-
-            case 1:
-                SetLocation(manager.spawnLocations[1]);
-                ChangeColor(possibleColors[1]);
-                break;
-
-            case 2:
-                SetLocation(manager.spawnLocations[2]);
-                ChangeColor(possibleColors[2]);
-                break;
-
-            case 3:
-                SetLocation(manager.spawnLocations[3]);
-                ChangeColor(possibleColors[3]);
-                break;
-
-            default:
-                break;
-        }
     }
 
     void SetLocation(Vector3 position)
@@ -363,14 +378,14 @@ public class PlayerMovement : MonoBehaviour
 
     void OnJump()
     {
-        if (onGround && active && !stunned)
+        if (onGround && canJump && active && !stunned)
         {
             canCheckOnGround = false;
             onGround = false;
             rb.AddForce(Vector3.up * jumpForce);
 
             // For jump tilt animation
-            currentTilt.x = tiltAmount * 2;
+            currentTilt.x = tiltAmount * -2;
 
             StartCoroutine(SetCanCheckOnGround());
         }
@@ -396,6 +411,43 @@ public class PlayerMovement : MonoBehaviour
             {
                 PlayerDeath();
             }
+        }
+    }
+
+    // Sets initial values like location and color
+    void InitialisePlayer()
+    {
+        int playersJoined = PlayerInputManager.instance.playerCount - 1;
+        manager.players.Add(gameObject.GetComponent<PlayerMovement>());
+
+        onGround = true;
+        canJump = true;
+        tauntIntro = true;
+
+        switch (playersJoined)
+        {
+            case 0:
+                SetLocation(manager.spawnLocations[0]);
+                ChangeColor(possibleColors[0]);
+                break;
+
+            case 1:
+                SetLocation(manager.spawnLocations[1]);
+                ChangeColor(possibleColors[1]);
+                break;
+
+            case 2:
+                SetLocation(manager.spawnLocations[2]);
+                ChangeColor(possibleColors[2]);
+                break;
+
+            case 3:
+                SetLocation(manager.spawnLocations[3]);
+                ChangeColor(possibleColors[3]);
+                break;
+
+            default:
+                break;
         }
     }
 }
