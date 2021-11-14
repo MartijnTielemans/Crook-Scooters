@@ -108,6 +108,12 @@ MonoBehaviour:
   - {fileID: 8843523463735302349, guid: 0d5bbf386868c554d8745228b056c7dd, type: 3}
   - {fileID: 8843523463735302349, guid: 74553a30faed16e4da39152797430ff7, type: 3}
   - {fileID: 8843523463735302349, guid: 081c730bf57e75b4b8ed500d2adb3336, type: 3}
+  - {fileID: 8843523463735302349, guid: 1ef67a9210863f74ea1a1726637e3b0c, type: 3}
+  - {fileID: 8843523463735302349, guid: 3194e15c152728f4eb71d17903fedb82, type: 3}
+  - {fileID: 8843523463735302349, guid: 3a06d0efbfca14a479aeaa119071581b, type: 3}
+  - {fileID: 8843523463735302349, guid: 23739b2f2f1d1364e883fc8b0314e6c6, type: 3}
+  - {fileID: 8843523463735302349, guid: 41e24374a539e4e4f964b49b76c7a614, type: 3}
+  - {fileID: 8843523463735302349, guid: 70f7958950b2ecf49ba242efd649b0d4, type: 3}
   onlySpawnEmpty: 1
   emptyChunkSpawnChance: 26
   spawnChanceDecreaseAmount: 2
