@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 public class SceneChanger : MonoBehaviour
 {
     [SerializeField] GameObject transition;
+    [SerializeField] AudioSource menuSelect;
 
     public void OnSumbit()
     {
@@ -20,6 +21,7 @@ public class SceneChanger : MonoBehaviour
 
     IEnumerator LoadScene()
     {
+        menuSelect.Play();
         transition.GetComponent<Animator>().Play("Transition_In");
         yield return new WaitForSeconds(.6f);
 

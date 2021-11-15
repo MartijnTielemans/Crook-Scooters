@@ -9,6 +9,10 @@ public class MenuButton : MonoBehaviour
     [SerializeField] float timer = .5f;
     bool canPress = true;
 
+    [Space]
+    [SerializeField] AudioSource menuMove;
+    [SerializeField] AudioSource menuSelect;
+
     public void StartButton()
     {
         if (canPress)
@@ -27,8 +31,14 @@ public class MenuButton : MonoBehaviour
             StartCoroutine(ExitSequence());
     }
 
+    public void PlayMoveSound()
+    {
+        menuMove.Play();
+    }
+
     IEnumerator StartSequence()
     {
+        menuSelect.Play();
         canPress = false;
         yield return new WaitForSeconds(timer);
 
@@ -40,6 +50,7 @@ public class MenuButton : MonoBehaviour
 
     IEnumerator HelpSequence()
     {
+        menuSelect.Play();
         canPress = false;
         yield return new WaitForSeconds(timer);
 
@@ -51,6 +62,7 @@ public class MenuButton : MonoBehaviour
 
     IEnumerator ExitSequence()
     {
+        menuSelect.Play();
         canPress = false;
         yield return new WaitForSeconds(timer);
 
