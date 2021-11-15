@@ -27,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
     public bool canMove;
     [SerializeField] bool canJump;
     public bool tauntIntro;
+    bool isTaunting;
     [SerializeField] bool stunned;
 
     [Space]
@@ -115,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
                     Taunt();
                 }
             }
-            else if  (onGround && stunned)
+            else if (onGround && stunned)
             {
                 // If stunned and on ground, change player tilt
                 currentTilt.x = tiltAmount * -2.5f;
@@ -182,6 +183,9 @@ public class PlayerMovement : MonoBehaviour
     // Called when the player jumps on another player
     void JumpOnPlayer()
     {
+        // Play sound
+        manager.PlaySound(2);
+
         rb.velocity = Vector3.zero;
         rb.AddForce(Vector3.up * bounceForce);
 
@@ -219,14 +223,25 @@ public class PlayerMovement : MonoBehaviour
     // Called when a player presses down while grounded
     void Taunt()
     {
-        // Set canMove and canJump to false for the taunt
-        canMove = false;
-        canJump = false;
-        StartCoroutine(TauntSequence(tauntTime));
+        if (!isTaunting)
+        {
+            // Set canMove and canJump to false for the taunt
+            canMove = false;
+            canJump = false;
+            StartCoroutine(TauntSequence(tauntTime));
+        }
     }
 
     IEnumerator TauntSequence(float timer)
     {
+        isTaunting = true;
+
+        // Play sound effect and laugh sound random
+        //manager.PlaySound();
+
+        int randomNumber = Random.Range(0, 4);
+        manager.PlayLaugh(randomNumber);
+
         // Play animation
         anim.Play("Player_Taunt");
         // Play particle effect
@@ -238,7 +253,8 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(timer);
 
         // Set movement to 0
-        currentInputVector.x = 0;
+        if (canMove)
+            currentInputVector.x = 0;
 
         // Set canMove if not in the player join phase
         if (!tauntIntro)
@@ -251,6 +267,8 @@ public class PlayerMovement : MonoBehaviour
         {
             tauntParticles[i].Stop();
         }
+
+        isTaunting = false;
     }
 
     IEnumerator SetCanCheckOnGround()
@@ -294,6 +312,9 @@ public class PlayerMovement : MonoBehaviour
 
     void PlayerDeath()
     {
+        // Play sound
+        manager.PlaySound(0);
+
         // Play death animation and particle
         anim.Play(deathAnimationName);
         hitParticle.Play();
@@ -380,6 +401,9 @@ public class PlayerMovement : MonoBehaviour
     {
         if (onGround && canJump && active && !stunned)
         {
+            // Play sound
+            //manager.PlaySound();
+
             canCheckOnGround = false;
             onGround = false;
             rb.AddForce(Vector3.up * jumpForce);

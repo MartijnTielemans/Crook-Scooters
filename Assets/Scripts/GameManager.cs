@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("References")]
     UIManager uiManager;
+    GameSoundManager soundManager;
     [SerializeField] MoveObjectScript moveScript;
     [SerializeField] Animator cameraAnim;
     [SerializeField] GameObject transition;
@@ -73,6 +74,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         uiManager = GetComponent<UIManager>();
+        soundManager = GetComponent<GameSoundManager>();
 
         originalMoveSpeed = moveScript.moveSpeed;
         currentTimeMilestone = timeInterval + playerJoinTimer;
@@ -251,6 +253,9 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Time milestone reached");
 
+        // Play sound
+        PlaySound(1);
+
         // Decrease obstacle spawn chance
         if (emptyChunkSpawnChance < minEmptySpawnChance)
         {
@@ -292,6 +297,16 @@ public class GameManager : MonoBehaviour
     public void OnPlayerJoined()
     {
         Debug.Log("player joined");
+    }
+
+    public void PlaySound(int sound)
+    {
+        soundManager.PlaySound(sound);
+    }
+
+    public void PlayLaugh(int laugh)
+    {
+        soundManager.PlayLaugh(laugh);
     }
 
     // Calls a coroutine sequence for different game endings

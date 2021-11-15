@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2165343977409280404}
   - component: {fileID: 7554940249377949174}
+  - component: {fileID: 3606786556691451173}
   - component: {fileID: 2165343977409280405}
   - component: {fileID: 371001018855357412}
   m_Layer: 0
@@ -53,6 +54,19 @@ MonoBehaviour:
   gameEndText: {fileID: 0}
   quickRestartCanvas: {fileID: 0}
   speedLinesAnim: {fileID: 0}
+--- !u!114 &3606786556691451173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165343977409280407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08f96aa8da6b1374a80ad97f6e9f306e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundEffects: []
 --- !u!114 &2165343977409280405
 MonoBehaviour:
   m_ObjectHideFlags: 0
