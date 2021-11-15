@@ -237,7 +237,7 @@ public class PlayerMovement : MonoBehaviour
         isTaunting = true;
 
         // Play sound effect and laugh sound random
-        //manager.PlaySound();
+        manager.PlaySound(4);
 
         int randomNumber = Random.Range(0, 4);
         manager.PlayLaugh(randomNumber);
@@ -253,8 +253,7 @@ public class PlayerMovement : MonoBehaviour
         yield return new WaitForSeconds(timer);
 
         // Set movement to 0
-        if (canMove)
-            currentInputVector.x = 0;
+        currentInputVector.x = 0;
 
         // Set canMove if not in the player join phase
         if (!tauntIntro)
@@ -402,7 +401,10 @@ public class PlayerMovement : MonoBehaviour
         if (onGround && canJump && active && !stunned)
         {
             // Play sound
-            //manager.PlaySound();
+            manager.PlaySound(3);
+            // Play random yell sound
+            int randomNumber = Random.Range(0, 6);
+            manager.PlayYell(randomNumber);
 
             canCheckOnGround = false;
             onGround = false;

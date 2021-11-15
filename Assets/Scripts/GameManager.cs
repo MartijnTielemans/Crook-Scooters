@@ -255,6 +255,7 @@ public class GameManager : MonoBehaviour
 
         // Play sound
         PlaySound(1);
+        PlaySound(5);
 
         // Decrease obstacle spawn chance
         if (emptyChunkSpawnChance < minEmptySpawnChance)
@@ -297,6 +298,7 @@ public class GameManager : MonoBehaviour
     public void OnPlayerJoined()
     {
         Debug.Log("player joined");
+        PlaySound(5);
     }
 
     public void PlaySound(int sound)
@@ -307,6 +309,11 @@ public class GameManager : MonoBehaviour
     public void PlayLaugh(int laugh)
     {
         soundManager.PlayLaugh(laugh);
+    }
+
+    public void PlayYell(int yell)
+    {
+        soundManager.PlayYell(yell);
     }
 
     // Calls a coroutine sequence for different game endings

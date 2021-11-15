@@ -12,6 +12,7 @@ public class MenuButton : MonoBehaviour
     [Space]
     [SerializeField] AudioSource menuMove;
     [SerializeField] AudioSource menuSelect;
+    [SerializeField] AudioSource scooterSound;
 
     public void StartButton()
     {
@@ -39,6 +40,7 @@ public class MenuButton : MonoBehaviour
     IEnumerator StartSequence()
     {
         menuSelect.Play();
+        scooterSound.Play();
         canPress = false;
         yield return new WaitForSeconds(timer);
 

@@ -10,6 +10,9 @@ public class GameSoundManager : MonoBehaviour
     [SerializeField]
     AudioSource[] laughSounds;
 
+    [SerializeField]
+    AudioSource[] yellSounds;
+
     public void PlaySound(int sound)
     {
         soundEffects[sound].Play();
@@ -18,5 +21,10 @@ public class GameSoundManager : MonoBehaviour
     public void PlayLaugh(int laugh)
     {
         laughSounds[laugh].Play();
+    }
+
+    public void PlayYell(int yell)
+    {
+        yellSounds[yell].Play();
     }
 }
