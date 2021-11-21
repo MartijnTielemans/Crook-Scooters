@@ -20,6 +20,12 @@ public class MenuButton : MonoBehaviour
             StartCoroutine(StartSequence());
     }
 
+    public void OnlineButton()
+    {
+        if (canPress)
+            StartCoroutine(OnlineSequence());
+    }
+
     public void HelpButton()
     {
         if (canPress)
@@ -48,6 +54,19 @@ public class MenuButton : MonoBehaviour
         yield return new WaitForSeconds(.6f);
 
         SceneManager.LoadScene("LoadingScreen");
+    }
+
+    IEnumerator OnlineSequence()
+    {
+        menuSelect.Play();
+        scooterSound.Play();
+        canPress = false;
+        yield return new WaitForSeconds(timer);
+
+        transition.GetComponent<Animator>().Play("Transition_In");
+        yield return new WaitForSeconds(.6f);
+
+        SceneManager.LoadScene("OnlineLobby");
     }
 
     IEnumerator HelpSequence()
