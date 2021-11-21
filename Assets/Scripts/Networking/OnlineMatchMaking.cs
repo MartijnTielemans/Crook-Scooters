@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 using Photon.Realtime; // Creating rooms
 using Photon.Pun; // Callbacks
@@ -9,18 +10,28 @@ using Photon.Pun; // Callbacks
 // Using ^ PHOTON / inheriting from puncallbacks v
 public class OnlineMatchMaking : MonoBehaviourPunCallbacks
 {
+    [SerializeField] PlayerIcons playerIcons;
     [SerializeField] string onlineScene;
     [Space]
-    [SerializeField] Button connectButton;
-    [SerializeField] Button playButton;
-    [SerializeField] Text debugText;
+    [SerializeField] GameObject lobbyCanvas;
+    [SerializeField] GameObject playButtonObject;
+    Button playButton;
+    [SerializeField] TextMeshProUGUI debugText;
 
-    //Called from UI-Button
+    private void Start()
+    {
+        playButton = playButtonObject.GetComponent<Button>();
+        lobbyCanvas.SetActive(false);
+
+        // Connects to master on start
+        ConnectToMaster();
+    }
+
     public void ConnectToMaster()
     {
         //Connect using default photon settings (to closest server with best ping)
         PhotonNetwork.ConnectUsingSettings();
-        debugText.text = "Connecting to server...";
+        debugText.text = "CONNECTING TO SERVER...";
 
         //Force connect to specific server
         //PhotonNetwork.ConnectToRegion("eu");
@@ -29,20 +40,16 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
     //Called when connected to the masterclient
     public override void OnConnectedToMaster()
     {
-        connectButton.interactable = false;
-
         debugText.text =
-            $"Connected to server in " +
-            $"{PhotonNetwork.CloudRegion} with ping " +
-            $"{PhotonNetwork.GetPing().ToString()}";
+            "CONNECTED TO SERVER";
 
-        playButton.interactable = true;
+        // Call searchCreateGame
+        SearchCreateGame();
     }
 
-    //Called from UI-Button
     public void SearchCreateGame()
     {
-        debugText.text = "Searching for game...";
+        debugText.text = "SEARCHING FOR GAME...";
         StartCoroutine(SearchForAGame());
     }
 
@@ -56,14 +63,18 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
     //Called when successfully joined a room
     public override void OnJoinedRoom()
     {
-        debugText.text = "Joining...";
-        PhotonNetwork.LoadLevel(onlineScene);
+        debugText.text = "SUCCESSFULLY JOINED ROOM";
+        playerIcons.UpdatePlayerIcons(PhotonNetwork.CurrentRoom.PlayerCount);
+
+        lobbyCanvas.SetActive(true);
+        playButtonObject.SetActive(true);
+        playButton.interactable = true;
     }
 
     //Called when there is no room/space to join
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        debugText.text = $"{message}, creating game...";
+        debugText.text = $"{message}, CREATING GAME...";
         StartCoroutine(CreateGame());
     }
 
@@ -86,6 +97,25 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
     //Called when the player has succesfully created a room
     public override void OnCreatedRoom()
     {
-        Debug.Log("Created room...");
+        Debug.Log("CREATED ROOM...");
+    }
+
+    // When a player leaves the room
+    public override void OnLeftRoom()
+    {
+        playerIcons.UpdatePlayerIcons(PhotonNetwork.CurrentRoom.PlayerCount);
+    }
+
+    // Called when start game menubutton is pressed
+    public void OnGameStart()
+    {
+        StartCoroutine(StartGame());
+    }
+
+    IEnumerator StartGame()
+    {
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        yield return new WaitForSeconds(1.5f);
+        PhotonNetwork.LoadLevel(onlineScene);
     }
 }
