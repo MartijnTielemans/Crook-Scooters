@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 
@@ -17,6 +18,9 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
     [SerializeField] GameObject playButtonObject;
     Button playButton;
     [SerializeField] TextMeshProUGUI debugText;
+    [Space]
+    public UnityEvent onPlayerEntered;
+    public UnityEvent onPlayerLeft;
 
     private void Start()
     {
@@ -100,8 +104,25 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
         Debug.Log("CREATED ROOM...");
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        onPlayerEntered.Invoke();
+    }
+
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        onPlayerLeft.Invoke();
+    }
+
+    // When a player enters the room
+    public void OnPlayerEntered()
+    {
+        Debug.Log("Player Entered Room.");
+        playerIcons.UpdatePlayerIcons(PhotonNetwork.CurrentRoom.PlayerCount);
+    }
+
     // When a player leaves the room
-    public override void OnLeftRoom()
+    public void OnPlayerLeft()
     {
         playerIcons.UpdatePlayerIcons(PhotonNetwork.CurrentRoom.PlayerCount);
     }
