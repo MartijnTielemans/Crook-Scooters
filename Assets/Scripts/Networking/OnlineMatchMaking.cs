@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 using Photon.Realtime; // Creating rooms
 using Photon.Pun; // Callbacks
@@ -12,12 +13,14 @@ using Photon.Pun; // Callbacks
 public class OnlineMatchMaking : MonoBehaviourPunCallbacks
 {
     [SerializeField] PlayerIcons playerIcons;
+    [SerializeField] GameObject transition;
     [SerializeField] string onlineScene;
     [Space]
     [SerializeField] GameObject lobbyCanvas;
     [SerializeField] GameObject playButtonObject;
     Button playButton;
     [SerializeField] TextMeshProUGUI debugText;
+    [SerializeField] AudioSource menuSelect;
     [Space]
     public UnityEvent onPlayerEntered;
     public UnityEvent onPlayerLeft;
@@ -69,10 +72,15 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
     {
         debugText.text = "SUCCESSFULLY JOINED ROOM";
         playerIcons.UpdatePlayerIcons(PhotonNetwork.CurrentRoom.PlayerCount);
+        PhotonNetwork.AutomaticallySyncScene = true;
 
         lobbyCanvas.SetActive(true);
-        playButtonObject.SetActive(true);
-        playButton.interactable = true;
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            playButtonObject.SetActive(true);
+            playButton.interactable = true;
+        }
     }
 
     //Called when there is no room/space to join
@@ -101,7 +109,7 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
     //Called when the player has succesfully created a room
     public override void OnCreatedRoom()
     {
-        Debug.Log("CREATED ROOM...");
+        Debug.Log("Created room.");
     }
 
     public override void OnPlayerEnteredRoom(Player newPlayer)
@@ -125,6 +133,13 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
     public void OnPlayerLeft()
     {
         playerIcons.UpdatePlayerIcons(PhotonNetwork.CurrentRoom.PlayerCount);
+
+        // Check if another player is now master client
+        if (PhotonNetwork.IsMasterClient)
+        {
+            playButtonObject.SetActive(true);
+            playButton.interactable = true;
+        }
     }
 
     // Called when start game menubutton is pressed
@@ -135,8 +150,44 @@ public class OnlineMatchMaking : MonoBehaviourPunCallbacks
 
     IEnumerator StartGame()
     {
-        PhotonNetwork.CurrentRoom.IsOpen = false;
-        yield return new WaitForSeconds(1.5f);
-        PhotonNetwork.LoadLevel(onlineScene);
+        debugText.text = "STARTING GAME...";
+        PhotonNetwork.CurrentRoom.IsOpen = false; // Close the room to players joining
+        yield return new WaitForSeconds(1.2f);
+        photonView.RPC("ShowTransition", RpcTarget.All); // Call the transition animation on all players
+        yield return new WaitForSeconds(0.5f);
+        PhotonNetwork.LoadLevel(onlineScene); // Load the game scene
     }
+
+    // Input for leaving the menu
+    public void OnSumbit()
+    {
+        StartCoroutine(LoadScene());
+    }
+
+    public void OnCancel()
+    {
+        StartCoroutine(LoadScene());
+    }
+
+    IEnumerator LoadScene()
+    {
+        menuSelect.Play();
+        ShowTransition();
+        yield return new WaitForSeconds(.6f);
+
+        DisconnectFromServer();
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    [PunRPC]
+    public void ShowTransition()
+    {
+        transition.GetComponent<Animator>().Play("Transition_In");
+    }
+
+    public void DisconnectFromServer()
+    {
+        PhotonNetwork.Disconnect();
+    }
+
 }
