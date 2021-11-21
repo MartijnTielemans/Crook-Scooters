@@ -14,6 +14,8 @@ GameObject:
   - component: {fileID: 950208211796973142}
   - component: {fileID: 950208211796973141}
   - component: {fileID: 4116721408672848597}
+  - component: {fileID: 6644486635804811923}
+  - component: {fileID: 6325816054471778617}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -210,6 +212,45 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &6644486635804811923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950208211796973145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents:
+  - {fileID: 6325816054471778617}
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
+--- !u!114 &6325816054471778617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950208211796973145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
 --- !u!1 &950208211839831331
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,14 +605,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4240451765682909731, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
   m_PrefabInstance: {fileID: 1562567620201226953}
   m_PrefabAsset: {fileID: 0}
---- !u!23 &4086967393361347128 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 3249498623409873137, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
-  m_PrefabInstance: {fileID: 1562567620201226953}
-  m_PrefabAsset: {fileID: 0}
 --- !u!23 &338216790819747804 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 1233648309113787669, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
+  m_PrefabInstance: {fileID: 1562567620201226953}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &4086967393361347128 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3249498623409873137, guid: 52f4ea9c68af01d45ac7bd590449c645, type: 3}
   m_PrefabInstance: {fileID: 1562567620201226953}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2659666063185672973

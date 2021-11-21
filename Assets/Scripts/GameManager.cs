@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
+using Photon.Realtime;
 
 [RequireComponent(typeof(UIManager))]
 public class GameManager : MonoBehaviour
@@ -30,6 +32,7 @@ public class GameManager : MonoBehaviour
     [Space]
     [Header("Player Joining")]
     [SerializeField] bool canJoin;
+    [SerializeField] int playersJoined;
     public GameObject playerPrefab;
     [SerializeField] float playerJoinTimer = 10;
     public Vector3[] spawnLocations;
@@ -70,6 +73,26 @@ public class GameManager : MonoBehaviour
     [SerializeField] float timeInterval = 12;
     float currentTimeMilestone;
     [SerializeField] float endSequenceTimer = 1;
+
+    private void Awake()
+    {
+        // Set offline mode
+        if (!PhotonNetwork.IsConnected)
+        {
+            PhotonNetwork.OfflineMode = true;
+            RoomOptions roomOpsSpecial = new RoomOptions()
+            {
+                IsVisible = false, // Private game?
+                IsOpen = false, // Joinable?
+                MaxPlayers = (byte)4, // RoomSize in Bytes
+            };
+            PhotonNetwork.CreateRoom("0", roomOpsSpecial);
+        }
+        else
+        {
+            PhotonNetwork.OfflineMode = false;
+        }
+    }
 
     void Start()
     {
@@ -412,5 +435,15 @@ public class GameManager : MonoBehaviour
         transition.GetComponent<Animator>().Play("Transition_In");
         yield return new WaitForSeconds(.6f);
         SceneManager.LoadScene("TestScene");
+    }
+
+    // Spawn a player onJoin
+    public void OnJoin()
+    {
+        if (playersJoined < 5)
+        {
+            GameObject player = PhotonNetwork.Instantiate(playerPrefab.name, Vector3.zero, Quaternion.identity);
+            playersJoined++;
+        }
     }
 }
